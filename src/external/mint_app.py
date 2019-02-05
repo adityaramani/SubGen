@@ -4,7 +4,7 @@ A simple example for VLC python bindings using PyQt5.
 Author: Saveliy Yusufov, Columbia University, sy2685@columbia.edu
 Date: 25 December 2018
 """
-import logging
+
 import platform
 import os
 import sys
@@ -12,7 +12,6 @@ import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
 import vlc
 
-logger = logging.getLogger("LIBVLC")
 class Player(QtWidgets.QMainWindow):
     """A simple Media Player using VLC and Qt
     """
@@ -24,7 +23,7 @@ class Player(QtWidgets.QMainWindow):
         # Create a basic vlc instance
         self.instance = vlc.Instance()
 
-        self.media = "/Users/aramani/Downloads/France vs Argentina 4-3 All Goals and Extended Highlights w- English Commentary (World Cup) 2018 HD.mp4"
+        self.media = None
 
         # Create an empty vlc media player
         self.mediaplayer = self.instance.media_player_new()
@@ -45,9 +44,9 @@ class Player(QtWidgets.QMainWindow):
             self.videoframe = QtWidgets.QFrame()
 
         self.palette = self.videoframe.palette()
-        self.palette.setColor(QtGui.QPalette.Window, QtGui.QColor(0, 0, 0,0))
+        self.palette.setColor(QtGui.QPalette.Window, QtGui.QColor(0, 0, 0))
         self.videoframe.setPalette(self.palette)
-        self.videoframe.setAutoFillBackground(False)
+        self.videoframe.setAutoFillBackground(True)
 
         self.positionslider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self)
         self.positionslider.setToolTip("Position")
@@ -152,13 +151,7 @@ class Player(QtWidgets.QMainWindow):
             self.mediaplayer.set_hwnd(int(self.videoframe.winId()))
         elif platform.system() == "Darwin": # for MacOS
             self.mediaplayer.set_nsobject(int(self.videoframe.winId()))
-        p =  b"file:///Users/aramani/Downloads/1.srt"
 
-
-        a = vlc.libvlc_media_player_add_slave(self.mediaplayer,vlc.MediaSlaveType.subtitle,p,True) 
-        logger.info(a)
-
-        # vlc.libvlc_video_set_spu(self.mediaplayer, b[0])
         self.play_pause()
 
     def set_volume(self, volume):
@@ -205,6 +198,5 @@ def main():
     app = QtWidgets.QApplication(sys.argv)
     player = Player()
     player.show()
-    player.resize(1280, 768)
+    player.resize(640, 480)
     sys.exit(app.exec_())
-
