@@ -1,7 +1,7 @@
 import logging
 import argparse
 import sys
-from external import extract_audio,app,mint_app
+from external import extract_audio,app,app
 
 parser = argparse.ArgumentParser(description='Offline Subtitle Generation for videos')
 parser.add_argument('-d', '--debug', default=False, action='store_true', help='Run in debug mode.')
@@ -28,8 +28,7 @@ else:
 logger = logging.getLogger("MainLogger")
 logger.debug("Started")
 
-
-mint_app.main()
+app.main()
 
 
 

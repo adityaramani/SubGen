@@ -10,6 +10,7 @@ import os
 import sys
 
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import Qt
 import vlc
 
 logger = logging.getLogger("LIBVLC")
@@ -24,8 +25,7 @@ class Player(QtWidgets.QMainWindow):
         # Create a basic vlc instance
         self.instance = vlc.Instance()
 
-        self.media = "/Users/aramani/Downloads/France vs Argentina 4-3 All Goals and Extended Highlights w- English Commentary (World Cup) 2018 HD.mp4"
-
+        self.media = ""
         # Create an empty vlc media player
         self.mediaplayer = self.instance.media_player_new()
 
@@ -71,11 +71,21 @@ class Player(QtWidgets.QMainWindow):
         self.volumeslider.setToolTip("Volume")
         self.hbuttonbox.addWidget(self.volumeslider)
         self.volumeslider.valueChanged.connect(self.set_volume)
+        
+        self.subsBox = QtWidgets.QWidget()
+        self.subsBox.autoFillBackground()
+        # self.subsBox.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.subsBox.setGeometry(20,20,20,20)
+        pal = QtGui.QPalette()
+        pal.setColor(QtGui.QPalette.Window, QtGui.QColor(20,34,124))
 
+        
         self.vboxlayout = QtWidgets.QVBoxLayout()
         self.vboxlayout.addWidget(self.videoframe)
         self.vboxlayout.addWidget(self.positionslider)
         self.vboxlayout.addLayout(self.hbuttonbox)
+
+        self.subsBox.setLayout(self.vboxlayout)
 
         self.widget.setLayout(self.vboxlayout)
 
@@ -152,10 +162,10 @@ class Player(QtWidgets.QMainWindow):
             self.mediaplayer.set_hwnd(int(self.videoframe.winId()))
         elif platform.system() == "Darwin": # for MacOS
             self.mediaplayer.set_nsobject(int(self.videoframe.winId()))
-        p =  b"file:///Users/aramani/Downloads/1.srt"
-
+        p =  b"file:///home/aditya/Downloads/[DownSub.com] What's on my Tech_ 2019!.srt"
 
         a = vlc.libvlc_media_player_add_slave(self.mediaplayer,vlc.MediaSlaveType.subtitle,p,True) 
+        logger.info("fhdsohdfskhdfsk")
         logger.info(a)
 
         # vlc.libvlc_video_set_spu(self.mediaplayer, b[0])
