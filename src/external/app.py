@@ -11,6 +11,7 @@ import sys
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPainter, QColor
 import vlc
 
 logger = logging.getLogger("LIBVLC")
@@ -72,22 +73,40 @@ class Player(QtWidgets.QMainWindow):
         self.hbuttonbox.addWidget(self.volumeslider)
         self.volumeslider.valueChanged.connect(self.set_volume)
         
-        self.subsBox = QtWidgets.QWidget()
-        self.subsBox.autoFillBackground()
+        self.subsBox = QtWidgets.QLabel()
+        self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.subsBox.setStyleSheet("background-color: transparent; color:yellow;")
+        
+        
+        # self.subPalette = self.subsBox.palette()
+        # self.subPalette.setColor(QtGui.QPalette.Text, QtGui.QColor(120, 120, 0,0))
+        # self.subsBox.setPalette(self.palette)
+        # self.subsBox.setAutoFillBackground(True)
+
+
+        # self.subsBox.setAttribute(Qt.WA_NoSystemBackground, True)
         # self.subsBox.setAttribute(Qt.WA_TranslucentBackground, True)
-        self.subsBox.setGeometry(20,20,20,20)
-        pal = QtGui.QPalette()
-        pal.setColor(QtGui.QPalette.Window, QtGui.QColor(20,34,124))
+        # self.subsBox.paintEvent = self.transparentPaint
+        # self.subsBox.setAttribute(Qt.WA_TransparentForMouseEvents)
+        # self.subsBox.setGeometry(1,10 ,250,30)
+       
+        self.subsBox.setText("TEST")
 
         
         self.vboxlayout = QtWidgets.QVBoxLayout()
-        self.vboxlayout.addWidget(self.videoframe)
         self.vboxlayout.addWidget(self.positionslider)
         self.vboxlayout.addLayout(self.hbuttonbox)
 
-        self.subsBox.setLayout(self.vboxlayout)
+        self.parentLayout = QtWidgets.QVBoxLayout()
+        self.windowLayout = QtWidgets.QGridLayout()
 
-        self.widget.setLayout(self.vboxlayout)
+        self.windowLayout.addWidget(self.videoframe,0,0,14,10)
+        self.windowLayout.addWidget(self.subsBox,13,4,1,3 )
+
+        self.parentLayout.addLayout(self.windowLayout)
+        self.parentLayout.addLayout(self.vboxlayout)
+
+        self.widget.setLayout(self.parentLayout)
 
         menu_bar = self.menuBar()
 
@@ -124,6 +143,10 @@ class Player(QtWidgets.QMainWindow):
             self.playbutton.setText("Pause")
             self.timer.start()
             self.is_paused = False
+
+    def transparentPaint(self, event):
+        painter = QPainter(self)
+        painter.fillRect(self.rect(), QColor(30, 110, 0, 255))
 
     def stop(self):
         """Stop player
