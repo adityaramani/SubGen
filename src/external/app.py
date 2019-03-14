@@ -75,7 +75,7 @@ class Player(QtWidgets.QMainWindow):
         
         self.subsBox = QtWidgets.QLabel()
         self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.subsBox.setStyleSheet("background-color: transparent; color:yellow;")
+        self.subsBox.setStyleSheet("background-color: transparent; color:black;")
         
         
         # self.subPalette = self.subsBox.palette()

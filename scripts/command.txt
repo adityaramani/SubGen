@@ -1,0 +1,4 @@
+shuf -n N input > output
+grep -Fvxf <lines-to-remove> <all-lines>
+
+awk 'NR==FNR{arr[$0];next} $0 in arr' train.csv val.csv 
