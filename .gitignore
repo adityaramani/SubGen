@@ -119,3 +119,4 @@ dmypy.json
 .pyre/
 .vscode/
 vlc_src/
+tmp/
