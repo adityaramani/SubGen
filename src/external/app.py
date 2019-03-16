@@ -8,6 +8,11 @@ import logging
 import platform
 import os
 import sys
+import signal
+
+from multiprocessing.connection import Client
+
+from .stt import ExtractAudio
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
@@ -32,6 +37,18 @@ class Player(QtWidgets.QMainWindow):
 
         self.create_ui()
         self.is_paused = False
+
+
+        signal.signal(signal.SIGXFSZ, self.set_subtitle_text)
+        address = ('localhost', 6001)     # family is deduced to be 'AF_INET'
+        self.conn   = Client(address)
+
+
+    def set_subtitle_text(self,*args):
+        msg = self.conn.recv()
+        logger.info("receieved msg = "  + str(msg))
+        self.subsBox.setText(msg)
+
 
     def create_ui(self):
         """Set up the user interface, signals & slots
@@ -75,7 +92,7 @@ class Player(QtWidgets.QMainWindow):
         
         self.subsBox = QtWidgets.QLabel()
         self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.subsBox.setStyleSheet("background-color: transparent; color:black;")
+        self.subsBox.setStyleSheet("background-color: black; color:white;")
         
         
         # self.subPalette = self.subsBox.palette()
@@ -162,6 +179,10 @@ class Player(QtWidgets.QMainWindow):
         filename = QtWidgets.QFileDialog.getOpenFileName(self, dialog_txt, os.path.expanduser('~'))
         if not filename:
             return
+
+        
+        extractor = ExtractAudio(filename)
+        extractor.start()
 
         # getOpenFileName returns a tuple, so use only the actual file name
         self.media = self.instance.media_new(filename[0])

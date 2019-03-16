@@ -1,11 +1,19 @@
 import logging
 import argparse
 import sys
-from external import extract_audio,app,app
+import os
+from external import app
+
+def writePidFile():
+    pid = str(os.getpid())
+    f = open('../tmp/player.pid', 'w')
+    f.write(pid)
+    f.close()
+
 
 parser = argparse.ArgumentParser(description='Offline Subtitle Generation for videos')
 parser.add_argument('-d', '--debug', default=False, action='store_true', help='Run in debug mode.')
-parser.add_argument('-p', '--path', help='Port number the interface runs on.', required = True)
+parser.add_argument('-p', '--path', help='Port number the interface runs on.')
 
 
 for handler in logging.root.handlers[:]:
@@ -18,7 +26,7 @@ if __args__.debug:
 
 
 if __args__.debug:
-    logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [%(process)d] %(message)s')
+    logging.basicConfig(level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [%(thread)d] %(message)s')
     # logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
     # print(logging.getLogger().handlers)
 else:
@@ -27,12 +35,10 @@ else:
 
 logger = logging.getLogger("MainLogger")
 logger.debug("Started")
-
+writePidFile()
 app.main()
 
 
-
-# extract_audio(__args__.path)
 
 
 # import vlc
