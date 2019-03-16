@@ -39,6 +39,7 @@ class Player(QtWidgets.QMainWindow):
         self.is_paused = False
 
 
+        
         signal.signal(signal.SIGXFSZ, self.set_subtitle_text)
         address = ('localhost', 6001)     # family is deduced to be 'AF_INET'
         self.conn   = Client(address)

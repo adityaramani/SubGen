@@ -72,7 +72,7 @@ logger  = logging.getLogger("Speech Recognizer")
 
 
 
-address = ('localhost', 6000)
+address = ('localhost', 6000) # TCP CONNECTION
 address_two = ('localhost', 6001)
 
 listener = Listener(address)
@@ -101,11 +101,12 @@ N_FEATURES = 26
 N_CONTEXT = 9
 
 
-model_path = "/home/aditya/Documents/project/indian_model/1/exported/output_graph.pb"
-model_path = "/home/aditya/Documents/project/indian_model/1/exported/output_graph.pb"
-alphabet_path = "/home/aditya/Documents/project/DeepSpeech/data/alphabet.txt"
-lm_path = '/home/aditya/Documents/project/DeepSpeech/data/lm/lm.binary'
-trie_path = "/home/aditya/Documents/project/DeepSpeech/data/lm/trie"
+
+model_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/output_graph.pb"
+model_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/output_graph.pbmm"
+alphabet_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/alphabet.txt"
+lm_path = '/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/lm.binary'
+trie_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/trie"
 
 
 
@@ -125,15 +126,11 @@ logger.info('Loaded language model in {:.3}s.'.format(lm_load_end))
 
 
 
-
-
-
 conn = listener.accept()
 conn_two = listener_two.accept()
 
 with open('../tmp/player.pid' ,'r') as fp:
     pid =  int(fp.read())
-
 
 
 class Worker(threading.Thread):
@@ -146,7 +143,7 @@ class Worker(threading.Thread):
             try:
                 work = self.q.get(timeout=3)  # 3s timeout
             except queue.Empty:
-                return
+                pass
             # do whatever work you have to do on work
             infer(work)
 
@@ -164,8 +161,11 @@ def add_to_queue(*args):
     msg = conn.recv()
     queue.put(msg)
 
-def infer(msg):
-    fin = wave.open(msg, 'rb')
+
+
+
+def infer(file_path):
+    fin = wave.open(file_path, 'rb')
     fs = fin.getframerate()
     if fs != 16000:
         logger.info('Warning: original sample rate ({}) is different than 16kHz. Resampling might produce erratic speech recognition.'.format(fs))
@@ -177,8 +177,12 @@ def infer(msg):
     fin.close()
 
     inference_start = timer()
+
     inf = ds.stt(audio, fs) 
+    
+    
     logger.info("Inference  = " + inf)
+
     conn_two.send(inf)
     os.kill(pid,signal.SIGXFSZ)
 
@@ -191,12 +195,11 @@ def infer(msg):
 
 
 
-signal.signal(signal.SIGXFSZ, add_to_queue)
+signal.signal(signal.SIGXFSZ, add_to_queue)  # regestering signal handler for SIGXFSZ
 
 
 
 while True:
-    print(queue.queue)
     pass
 
 
