@@ -1,4 +1,5 @@
 base_path = "/media/aditya/AE02DDA702DD7535/Users/Aditya/Downloads/IndicTTS/extracted/"
+base_path = "/gdrive/My Drive/resampled/"
 genders  = ['male', 'female']
 
 
