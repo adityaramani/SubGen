@@ -93,7 +93,7 @@ class Player(QtWidgets.QMainWindow):
         
         self.subsBox = QtWidgets.QLabel()
         self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.subsBox.setStyleSheet("background-color: black; color:white;")
+        self.subsBox.setStyleSheet("background-color: black; color:white;font-size:20px ; ")
         
         
         # self.subPalette = self.subsBox.palette()
@@ -108,7 +108,7 @@ class Player(QtWidgets.QMainWindow):
         # self.subsBox.setAttribute(Qt.WA_TransparentForMouseEvents)
         # self.subsBox.setGeometry(1,10 ,250,30)
        
-        self.subsBox.setText("TEST")
+        self.subsBox.setText("")
 
         
         self.vboxlayout = QtWidgets.QVBoxLayout()
@@ -119,7 +119,7 @@ class Player(QtWidgets.QMainWindow):
         self.windowLayout = QtWidgets.QGridLayout()
 
         self.windowLayout.addWidget(self.videoframe,0,0,14,10)
-        self.windowLayout.addWidget(self.subsBox,13,4,1,3 )
+        self.windowLayout.addWidget(self.subsBox,13,1,1,8 )
 
         self.parentLayout.addLayout(self.windowLayout)
         self.parentLayout.addLayout(self.vboxlayout)
@@ -209,9 +209,9 @@ class Player(QtWidgets.QMainWindow):
             self.mediaplayer.set_nsobject(int(self.videoframe.winId()))
         p =  b"file:///home/aditya/Downloads/[DownSub.com] What's on my Tech_ 2019!.srt"
 
-        a = vlc.libvlc_media_player_add_slave(self.mediaplayer,vlc.MediaSlaveType.subtitle,p,True) 
-        logger.info("fhdsohdfskhdfsk")
-        logger.info(a)
+        # a = vlc.libvlc_media_player_add_slave(self.mediaplayer,vlc.MediaSlaveType.subtitle,p,True) 
+        # logger.info("fhdsohdfskhdfsk")
+        # logger.info(a)
 
         # vlc.libvlc_video_set_spu(self.mediaplayer, b[0])
         self.play_pause()

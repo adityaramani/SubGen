@@ -32,6 +32,7 @@ import numpy as np
 import shlex
 import subprocess
 import sys
+from time import sleep
 import wave
 import logging
 from deepspeech import Model
@@ -49,7 +50,7 @@ import signal
 from multiprocessing.connection import Listener
 
 
-queue = queue.Queue()
+q = queue.Queue()
 
 def writePidFile():
     pid = str(os.getpid())
@@ -102,7 +103,7 @@ N_CONTEXT = 9
 
 
 
-model_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/output_graph.pb"
+# model_path = "/home/aditya/Documents/project/indian_model/1/exported/output_graph.pb"
 model_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/output_graph.pbmm"
 alphabet_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/alphabet.txt"
 lm_path = '/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/lm.binary'
@@ -143,8 +144,9 @@ class Worker(threading.Thread):
             try:
                 work = self.q.get(timeout=3)  # 3s timeout
             except queue.Empty:
-                pass
+                continue
             # do whatever work you have to do on work
+            logging.debug("logging  " + work)
             infer(work)
 
             self.q.task_done()
@@ -152,14 +154,14 @@ class Worker(threading.Thread):
 
 
 
-w = Worker(queue)
+w = Worker(q)
 w.start()
 
 
 def add_to_queue(*args):
     
     msg = conn.recv()
-    queue.put(msg)
+    q.put(msg)
 
 
 
@@ -188,7 +190,6 @@ def infer(file_path):
 
     inference_end = timer() - inference_start
     logger.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
-
 
 
 

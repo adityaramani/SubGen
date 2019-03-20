@@ -21,38 +21,54 @@ class ExtractAudio(threading.Thread):
 
     def extract_audio (self):
         logger.debug("Starting Extarct")
-        subprocess.run(["ffmpeg", "-ss","00:00:00", "-i" , self.audio_path,'-to', "00:09:00" ,"-acodec", "pcm_s16le", "-ar" , "16000", "-ac" ,"1" ,"-vn" ,"../tmp/1.wav", "-y"])
+        subprocess.run(["ffmpeg", "-ss","00:00:00", "-i" , self.audio_path, 
+                        '-to', "00:08:00" ,"-acodec", "pcm_s16le", "-ar" , "16000"
+                        , "-ac" ,"1" ,#'-af', 'highpass=f=200, lowpass=f=800',
+                        "-vn" ,"/tmp/1.wav", "-y"])
         logger.debug("Finished Extarct")
     
+
+
     def run(self):
+        address = ('localhost', 6000)     # family is deduced to be 'AF_INET'
+        conn   = Client(address)
         self.extract_audio()
 
-        sound_file = AudioSegment.from_wav("../tmp/1.wav")
+        sound_file = AudioSegment.from_wav("/tmp/1.wav")
         logger.debug("Started segmenting")
 
+
+
+        with open('../tmp/recognizer.pid' ,'r') as fp:
+            pid =  int(fp.read())
+            
+        # conn.send("/tmp/1.wav")
+        os.kill(pid,signal.SIGXFSZ)
+
+        
         audio_chunks = split_on_silence(sound_file,
         # must be silent for at least half a second
-        min_silence_len=500,
+        min_silence_len=1000,
+        keep_silence=100,
         # consider it silent if quieter than -16 dBFS
         silence_thresh=-16)
 
         logger.debug("Finished segmenting " + str(len(audio_chunks)))
         
-        address = ('localhost', 6000)     # family is deduced to be 'AF_INET'
-        conn   = Client(address)
         
-        with open('../tmp/recognizer.pid' ,'r') as fp:
-            pid =  int(fp.read())
-
-        for i, chunk in enumerate(audio_chunks):
-            out_file = "../tmp/chunk{0}.wav".format(i)
+        
+        
+        
+        for i, chunk in enumerate(sound_file[12000::3000]):
+            out_file = "/tmp/chunk{0}.wav".format(i)
             chunk.export(out_file, format="wav")
             logger.info("Sending "  + out_file)
+            print(out_file)
             conn.send(out_file)
             print(pid)
             os.kill(pid,signal.SIGXFSZ)
         # conn.close()
-
+        
 class SpeechRecognizer():
     
     def __init__(self, config):
