@@ -19,7 +19,7 @@ def audiofile_to_input_vector(audio_filename, numcep, numcontext):
     while True:
         try:
             fs, audio = wav.read(audio_filename)
-            print("success , " audio_filename)
+            print("success  ", audio_filename)
             break
         except:
             continue
