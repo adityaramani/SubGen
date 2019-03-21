@@ -11,9 +11,9 @@ python -u DeepSpeech.py \
   --train_files /content/SubGen/scripts/train.csv\
   --dev_files /content/SubGen/scripts/dev.csv \
   --test_files /content/SubGen/scripts/val.csv \
-  --train_batch_size 2 \
-  --dev_batch_size 2 \
-  --test_batch_size 2 \
+  --train_batch_size 8 \
+  --dev_batch_size 8 \
+  --test_batch_size 8 \
   --n_hidden 2048 \
   --epoch -100 \
   --validation_step 1 \

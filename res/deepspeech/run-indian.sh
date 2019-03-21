@@ -11,11 +11,11 @@ python -u DeepSpeech.py \
   --train_files /home/aditya/Documents/project/SubGen/scripts/train.csv\
   --dev_files /home/aditya/Documents/project/SubGen/scripts/dev.csv \
   --test_files /home/aditya/Documents/project/SubGen/scripts/val.csv \
-  --train_batch_size 2 \
-  --dev_batch_size 2 \
-  --test_batch_size 2 \
+  --train_batch_size 8 \
+  --dev_batch_size 8 \
+  --test_batch_size 8 \
   --n_hidden 2048 \
-  --epoch -50 \
+  --epoch -150 \
   --validation_step 1 \
   --early_stop True \
   --earlystop_nsteps 6 \
