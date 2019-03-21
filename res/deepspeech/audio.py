@@ -22,9 +22,9 @@ def audiofile_to_input_vector(audio_filename, numcep, numcontext):
             print("success  ", audio_filename)
             break
         except:
+            sleep(1)
+            print("sleeping")
             continue
-        sleep(1)
-        print("sleeping")
     # Get mfcc coefficients
     features = mfcc(audio, samplerate=fs, numcep=numcep, winlen=0.032, winstep=0.02, winfunc=np.hamming,nfft=2048)
 
