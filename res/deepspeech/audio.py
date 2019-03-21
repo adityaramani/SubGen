@@ -19,11 +19,12 @@ def audiofile_to_input_vector(audio_filename, numcep, numcontext):
     while True:
         try:
             fs, audio = wav.read(audio_filename)
+            print("success , " audio_filename)
             break
         except:
             continue
         sleep(1)
-
+        print("sleeping")
     # Get mfcc coefficients
     features = mfcc(audio, samplerate=fs, numcep=numcep, winlen=0.032, winstep=0.02, winfunc=np.hamming,nfft=2048)
 
