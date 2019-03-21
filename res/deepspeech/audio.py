@@ -5,7 +5,7 @@ from time import sleep
 from python_speech_features import mfcc
 
 def read(audio_file):
-    fs, audio = wav.read(audio_filename
+    fs, audio = wav.read(audio_filename)
     return fs, audio
 
 def audiofile_to_input_vector(audio_filename, numcep, numcontext):
