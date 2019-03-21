@@ -1,8 +1,12 @@
 import numpy as np
 import scipy.io.wavfile as wav
+from time import sleep
 
 from python_speech_features import mfcc
 
+def read(audio_file):
+    fs, audio = wav.read(audio_filename
+    return fs, audio
 
 def audiofile_to_input_vector(audio_filename, numcep, numcontext):
     r"""
@@ -12,7 +16,13 @@ def audiofile_to_input_vector(audio_filename, numcep, numcontext):
     in a numpy array.
     """
     # Load wav files
-    fs, audio = wav.read(audio_filename)
+    while True:
+        try:
+            fs, audio = wav.read(audio_filename)
+            break
+        except:
+            continue
+        sleep(1)
 
     # Get mfcc coefficients
     features = mfcc(audio, samplerate=fs, numcep=numcep, winlen=0.032, winstep=0.02, winfunc=np.hamming,nfft=2048)
