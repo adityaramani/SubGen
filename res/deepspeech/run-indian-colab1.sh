@@ -15,7 +15,7 @@ python -u DeepSpeech.py \
   --dev_batch_size 2 \
   --test_batch_size 2 \
   --n_hidden 2048 \
-  --epoch -100 \
+  --epoch -3 \
   --validation_step 1 \
   --early_stop True \
   --earlystop_nsteps 6 \
@@ -25,7 +25,7 @@ python -u DeepSpeech.py \
   --learning_rate 0.0001 \
   --report_count 100 \
   --use_seq_length False \
-  --export_dir /gdrive/My Drive/exported_models/ \
+  --export_dir "/gdrive/My Drive/exported_models/" \
   --checkpoint_dir /content/deepspeech-0.4.1-checkpoint \
   "$@"
 

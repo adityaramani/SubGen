@@ -25,7 +25,7 @@ python -u DeepSpeech.py \
   --learning_rate 0.0001 \
   --report_count 100 \
   --use_seq_length False \
-  --export_dir /gdrive/My Drive/exported_models/ \
+  --export_dir "/gdrive/My Drive/exported_models/" \
   --checkpoint_dir /content/deepspeech-0.4.1-checkpoint \
   "$@"
 
