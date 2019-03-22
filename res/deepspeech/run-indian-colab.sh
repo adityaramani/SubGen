@@ -15,7 +15,7 @@ python -u DeepSpeech.py \
   --dev_batch_size 12 \
   --test_batch_size 12 \
   --n_hidden 2048 \
-  --epoch -100 \
+  --epoch -6 \
   --validation_step 1 \
   --early_stop True \
   --earlystop_nsteps 6 \
