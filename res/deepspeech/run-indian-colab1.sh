@@ -11,11 +11,11 @@ python -u DeepSpeech.py \
   --train_files /content/SubGen/scripts/train1.csv\
   --dev_files /content/SubGen/scripts/dev1.csv \
   --test_files /content/SubGen/scripts/val1.csv \
-  --train_batch_size 16 \
-  --dev_batch_size 16 \
-  --test_batch_size 16 \
+  --train_batch_size 12 \
+  --dev_batch_size 12 \
+  --test_batch_size 12 \
   --n_hidden 2048 \
-  --epoch -3 \
+  --epoch -20 \
   --validation_step 1 \
   --early_stop True \
   --earlystop_nsteps 6 \
@@ -26,6 +26,6 @@ python -u DeepSpeech.py \
   --report_count 100 \
   --use_seq_length False \
   --export_dir "/gdrive/My Drive/exported_models/" \
-  --checkpoint_dir "/gdrive/My Drive/deepspeech-0.4.1-checkpoint" \
+  --checkpoint_dir "/gdrive/My Drive/deepspeech-0.4.1-checkpoint-copy" \
   "$@"
 
