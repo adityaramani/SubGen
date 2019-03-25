@@ -64,10 +64,10 @@ def train_model(input_to_softmax,
     # CTC loss is implemented elsewhere, so use a dummy lambda function for the loss
     model.compile(loss={'ctc': lambda y_true, y_pred: y_pred}, optimizer=optimizer)
 
-    '''
+    
     # make results/ directory, if necessary
-    if not os.path.exists('results'):
-        os.makedirs('results')'''
+    #if not os.path.exists('results'):
+    #    os.makedirs('results')
         
     #model.load_weights("/gdrive/My Drive/results/model_end.h5")
     
@@ -79,5 +79,5 @@ def train_model(input_to_softmax,
 
     
     # save model loss
-    with open('results/'+pickle_path, 'wb') as f:
+    with open('/gdrive/My Drive/results/'+pickle_path, 'wb') as f:
         pickle.dump(hist.history, f)
