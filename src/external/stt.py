@@ -3,12 +3,16 @@ import logging
 import subprocess
 import threading
 from pydub import AudioSegment
+
 from multiprocessing.connection import Client
 from pydub.silence import split_on_silence
+from timeit import default_timer as timer
+from pathlib import Path
 import os
-
+import time 
 import signal
 
+SPLIT_INTERVAL = 10
 
 logger = logging.getLogger("SpeechToText")
 
@@ -18,56 +22,38 @@ class ExtractAudio(threading.Thread):
     def __init__(self, audio_path):
         threading.Thread.__init__(self)
         self.audio_path = audio_path[0]
+        Path("/tmp/stt/").mkdir(exist_ok=True)
 
+        self.audio_length = int(float(subprocess.run(["ffprobe" ,"-i" , self.audio_path ,
+                                        "-show_entries","format=duration", "-v" ,"quiet" ,"-of" ,'csv=p=0'],
+                                        stdout=subprocess.PIPE).stdout.decode('utf-8').strip()))
+
+    
     def extract_audio (self):
         logger.debug("Starting Extarct")
-        subprocess.run(["ffmpeg", "-ss","00:00:00", "-i" , self.audio_path, 
-                        '-to', "00:08:00" ,"-acodec", "pcm_s16le", "-ar" , "16000"
-                        , "-ac" ,"1" ,#'-af', 'highpass=f=200, lowpass=f=800',
-                        "-vn" ,"/tmp/1.wav", "-y"])
-        logger.debug("Finished Extarct")
+        ts = timer()
+        intermediate_name = 0
+        
+        for i in range(0, self.audio_length-SPLIT_INTERVAL, SPLIT_INTERVAL):
+            start_time =  time.strftime('%H:%M:%S', time.gmtime(i))
+            end_time =  time.strftime('%H:%M:%S', time.gmtime(i+SPLIT_INTERVAL))
+            print(start_time , end_time)
+            subprocess.run(["ffmpeg"#,"-nostats", "-loglevel", "0" 
+                            ,"-ss",str(i), "-i" , self.audio_path 
+                            ,"-t", str(SPLIT_INTERVAL) 
+                            ,"-acodec", "pcm_s16le", "-ar" , "16000"
+                            , "-ac" ,"1" ,#'-af', 'highpass=f=200, lowpass=f=800',
+                            "-vn" ,"/tmp/stt/" + str(intermediate_name)+".wav", "-y"])
+            logger.debug("Chunk " +  str(intermediate_name)+" in {}s ".format( timer()))
+            
+            intermediate_name+=1
+        
+        logger.debug("Finished Extarcting  in {:.3}s ".format(timer() - ts))
     
 
-
     def run(self):
-        address = ('localhost', 6000)     # family is deduced to be 'AF_INET'
-        conn   = Client(address)
+        
         self.extract_audio()
-
-        sound_file = AudioSegment.from_wav("/tmp/1.wav")
-        logger.debug("Started segmenting")
-
-
-
-        with open('../tmp/recognizer.pid' ,'r') as fp:
-            pid =  int(fp.read())
-            
-        # conn.send("/tmp/1.wav")
-        os.kill(pid,signal.SIGXFSZ)
-
-        
-        audio_chunks = split_on_silence(sound_file,
-        # must be silent for at least half a second
-        min_silence_len=1000,
-        keep_silence=100,
-        # consider it silent if quieter than -16 dBFS
-        silence_thresh=-16)
-
-        logger.debug("Finished segmenting " + str(len(audio_chunks)))
-        
-        
-        
-        
-        
-        for i, chunk in enumerate(sound_file[12000::3000]):
-            out_file = "/tmp/chunk{0}.wav".format(i)
-            chunk.export(out_file, format="wav")
-            logger.info("Sending "  + out_file)
-            print(out_file)
-            conn.send(out_file)
-            print(pid)
-            os.kill(pid,signal.SIGXFSZ)
-        # conn.close()
         
 class SpeechRecognizer():
     
@@ -76,3 +62,7 @@ class SpeechRecognizer():
 
     def infer(self, audio ):
         pass
+
+
+if __name__ == "__main__":
+    ExtractAudio(["/home/aditya/Downloads/indian.mp4"]).start()

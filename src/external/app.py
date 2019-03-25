@@ -42,7 +42,7 @@ class Player(QtWidgets.QMainWindow):
         
         signal.signal(signal.SIGXFSZ, self.set_subtitle_text)
         address = ('localhost', 6001)     # family is deduced to be 'AF_INET'
-        self.conn   = Client(address)
+        # self.conn   = Client(address)
 
 
     def set_subtitle_text(self,*args):
@@ -94,6 +94,8 @@ class Player(QtWidgets.QMainWindow):
         self.subsBox = QtWidgets.QLabel()
         self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
         self.subsBox.setStyleSheet("background-color: black; color:white;font-size:20px ; ")
+        self.subsBox.hide()
+
         
         
         # self.subPalette = self.subsBox.palette()
@@ -152,6 +154,8 @@ class Player(QtWidgets.QMainWindow):
             self.playbutton.setText("Play")
             self.is_paused = True
             self.timer.stop()
+            self.subsBox.hide()
+
         else:
             if self.mediaplayer.play() == -1:
                 self.open_file()
@@ -161,10 +165,7 @@ class Player(QtWidgets.QMainWindow):
             self.playbutton.setText("Pause")
             self.timer.start()
             self.is_paused = False
-
-    def transparentPaint(self, event):
-        painter = QPainter(self)
-        painter.fillRect(self.rect(), QColor(30, 110, 0, 255))
+            self.subsBox.show()
 
     def stop(self):
         """Stop player
@@ -207,11 +208,7 @@ class Player(QtWidgets.QMainWindow):
             self.mediaplayer.set_hwnd(int(self.videoframe.winId()))
         elif platform.system() == "Darwin": # for MacOS
             self.mediaplayer.set_nsobject(int(self.videoframe.winId()))
-        p =  b"file:///home/aditya/Downloads/[DownSub.com] What's on my Tech_ 2019!.srt"
 
-        # a = vlc.libvlc_media_player_add_slave(self.mediaplayer,vlc.MediaSlaveType.subtitle,p,True) 
-        # logger.info("fhdsohdfskhdfsk")
-        # logger.info(a)
 
         # vlc.libvlc_video_set_spu(self.mediaplayer, b[0])
         self.play_pause()
