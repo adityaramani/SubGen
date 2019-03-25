@@ -68,7 +68,7 @@ def train_model(input_to_softmax,
     if not os.path.exists('results'):
         os.makedirs('results')
         
-    model.load_weights("/content/SubGen/res/speech-recognition-neural-network-master/results/model_end.pickle/")
+    model.load_weights("/content/SubGen/res/speech-recognition-neural-network-master/results/model_end.h5/")
     
     # add checkpointer
     checkpointer = ModelCheckpoint(filepath='results/'+save_model_path, monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
