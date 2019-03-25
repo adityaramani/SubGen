@@ -120,3 +120,4 @@ dmypy.json
 .vscode/
 vlc_src/
 tmp/
+res/speech-recognition-neural-network-master/results/
