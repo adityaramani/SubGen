@@ -69,15 +69,15 @@ def train_model(input_to_softmax,
     if not os.path.exists('results'):
        os.makedirs('results')
         
-    #model.load_weights("/gdrive/My Drive/results/model_end.h5")
+    
     
     # add checkpointer
-    checkpointer = ModelCheckpoint(filepath='/results/' + save_model_path, monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+    checkpointer = ModelCheckpoint(filepath='results/'+save_model_path, monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
 
     # train the model
     hist = model.fit_generator(generator=audio_gen.next_train(), steps_per_epoch=steps_per_epoch,epochs=epochs, validation_data=audio_gen.next_valid(), validation_steps=validation_steps,callbacks=[checkpointer], verbose=verbose)
 
     
     # save model loss
-    with open('/results/'+pickle_path, 'wb') as f:
+    with open('results/'+pickle_path', 'wb') as f:
        pickle.dump(hist.history, f)
