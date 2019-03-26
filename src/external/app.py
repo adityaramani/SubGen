@@ -10,9 +10,8 @@ import os
 import sys
 import signal
 
-from multiprocessing.connection import Client
 
-from .stt import ExtractAudio
+from .stt import SyncDaemon
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import Qt
@@ -40,15 +39,8 @@ class Player(QtWidgets.QMainWindow):
 
 
         
-        signal.signal(signal.SIGXFSZ, self.set_subtitle_text)
-        address = ('localhost', 6001)     # family is deduced to be 'AF_INET'
-        # self.conn   = Client(address)
+        
 
-
-    def set_subtitle_text(self,*args):
-        msg = self.conn.recv()
-        logger.info("receieved msg = "  + str(msg))
-        self.subsBox.setText(msg)
 
 
     def create_ui(self):
@@ -183,8 +175,6 @@ class Player(QtWidgets.QMainWindow):
             return
 
         
-        extractor = ExtractAudio(filename)
-        extractor.start()
 
         # getOpenFileName returns a tuple, so use only the actual file name
         self.media = self.instance.media_new(filename[0])
@@ -212,6 +202,7 @@ class Player(QtWidgets.QMainWindow):
 
         # vlc.libvlc_video_set_spu(self.mediaplayer, b[0])
         self.play_pause()
+        self.SyncDaemon = SyncDaemon(10,filename[0], self.mediaplayer, self.subsBox)
 
     def set_volume(self, volume):
         """Set the volume
