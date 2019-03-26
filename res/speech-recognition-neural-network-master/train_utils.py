@@ -69,7 +69,7 @@ def train_model(input_to_softmax,
     #if not os.path.exists('results'):
     #   os.makedirs('results')
         
-    if not os.path.exists('/gdrive/My Drive/results/model_end.h5'):
+    if os.path.exists('/gdrive/My Drive/results/model_end.h5'):
         model.load_weights('/gdrive/My Drive/results/model_end.h5')
     
     # add checkpointer
