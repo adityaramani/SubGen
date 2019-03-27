@@ -39,7 +39,7 @@ def train_model(input_to_softmax,
                 spectrogram=True,
                 mfcc_dim=13,
                 optimizer=SGD(lr=0.02, decay=1e-6, momentum=0.9, nesterov=True, clipnorm=5),
-                epochs=200,
+                epochs=10,
                 verbose=1,
                 sort_by_duration=False,
                 max_duration=10.0):
@@ -66,18 +66,24 @@ def train_model(input_to_softmax,
 
     
     # make results/ directory, if necessary
-    if not os.path.exists('results'):
-       os.makedirs('results')
+    #if not os.path.exists('results'):
+    #   os.makedirs('results')
         
+    #if os.path.exists('/gdrive/My Drive/results/model_end.h5'):
+    #    model.load_weights('/gdrive/My Drive/results/model_end.h5')
+    resume_weights = '/gdrive/My Drive/results/model_end.hdf5'
     
+    if os.path.isfile(resume_weights):
+        print ("Resumed model's weights from {}".format(resume_weights))
+        model.load_weights(resume_weights)
     
     # add checkpointer
-    checkpointer = ModelCheckpoint(filepath='results/'+save_model_path, monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+    checkpointer = ModelCheckpoint(filepath='/gdrive/My Drive/results/'+save_model_path, monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
 
     # train the model
     hist = model.fit_generator(generator=audio_gen.next_train(), steps_per_epoch=steps_per_epoch,epochs=epochs, validation_data=audio_gen.next_valid(), validation_steps=validation_steps,callbacks=[checkpointer], verbose=verbose)
 
     
     # save model loss
-    with open('results/'+pickle_path', 'wb') as f:
-       pickle.dump(hist.history, f)
+    #with open('/gdrive/My Drive/results/'+pickle_path, 'wb') as f:
+    #   pickle.dump(hist.history, f)
