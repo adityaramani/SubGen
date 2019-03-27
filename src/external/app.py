@@ -181,6 +181,8 @@ class Player(QtWidgets.QMainWindow):
 
         # Put the media in the media player
         self.mediaplayer.set_media(self.media)
+        self.SyncDaemon = SyncDaemon(3,filename[0], self.mediaplayer, self.subsBox)
+
 
         # Parse the metadata of the file
         self.media.parse()
@@ -202,7 +204,6 @@ class Player(QtWidgets.QMainWindow):
 
         # vlc.libvlc_video_set_spu(self.mediaplayer, b[0])
         self.play_pause()
-        self.SyncDaemon = SyncDaemon(10,filename[0], self.mediaplayer, self.subsBox)
 
     def set_volume(self, volume):
         """Set the volume

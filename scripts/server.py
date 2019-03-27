@@ -72,7 +72,7 @@ def infer(file_path):
     
     logger.info("Inference  = " + inf)
 
-    conn_two.send(inf)
+    conn_two.send(file_path+"$$"+inf)
     os.kill(pid,signal.SIGXFSZ)
 
     inference_end = timer() - inference_start
