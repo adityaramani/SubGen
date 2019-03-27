@@ -85,5 +85,5 @@ def train_model(input_to_softmax,
 
     
     # save model loss
-    with open('/gdrive/My Drive/results/'+pickle_path, 'wb') as f:
-       pickle.dump(hist.history, f)
+    #with open('/gdrive/My Drive/results/'+pickle_path, 'wb') as f:
+    #   pickle.dump(hist.history, f)
