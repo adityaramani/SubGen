@@ -39,7 +39,7 @@ def train_model(input_to_softmax,
                 spectrogram=True,
                 mfcc_dim=13,
                 optimizer=SGD(lr=0.02, decay=1e-6, momentum=0.9, nesterov=True, clipnorm=5),
-                epochs=10,
+                epochs=30,
                 verbose=1,
                 sort_by_duration=False,
                 max_duration=10.0):
