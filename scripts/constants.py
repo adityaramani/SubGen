@@ -25,6 +25,7 @@ N_CONTEXT = 9
 
 # model_path = "/home/aditya/Documents/project/indian_model/1/exported/output_graph.pb"
 model_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/output_graph.pbmm"
+model_path =  "/home/aditya/Downloads/output_graph-stock-train.pb"
 alphabet_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/alphabet.txt"
 lm_path = '/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/lm.binary'
 trie_path = "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/trie"

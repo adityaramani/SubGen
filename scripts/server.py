@@ -97,10 +97,6 @@ class Worker(threading.Thread):
             self.q.task_done()
 
 
-worker = Worker(q)
-worker.start()
-
-
 
 class Watcher(threading.Thread):
     DIRECTORY_TO_WATCH = "/tmp/stt"
@@ -145,9 +141,8 @@ class Handler(FileSystemEventHandler):
 watcher = Watcher()
 watcher.start()
 
-address_two = ('localhost', 6001)
-listener_two = Listener(address_two)
-
+worker = Worker(q)
+worker.start()
 
 
 logger.info('Loading model from file {}'.format(model_path))
@@ -165,18 +160,12 @@ logger.info('Loaded language model in {:.3}s.'.format(lm_load_end))
 
 
 
+address_two = ('localhost', 6001)
+listener_two = Listener(address_two)
 conn_two = listener_two.accept()
 
 with open('../tmp/player.pid' ,'r') as fp:
     pid =  int(fp.read())
-
-
-
-
-
-
-
-
 
 
 def convert_samplerate(audio_path):
