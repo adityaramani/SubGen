@@ -71,7 +71,7 @@ def train_model(input_to_softmax,
         
     #if os.path.exists('/gdrive/My Drive/results/model_end.h5'):
     #    model.load_weights('/gdrive/My Drive/results/model_end.h5')
-    resume_weights = '/gdrive/My Drive/results/model_end.hdf5'
+    resume_weights = '/gdrive/My Drive/results/model_end_new.hdf5'
     
     if os.path.isfile(resume_weights):
         print ("Resumed model's weights from {}".format(resume_weights))
