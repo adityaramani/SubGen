@@ -226,9 +226,10 @@ class AudioGenerator():
         samples = self.rng.sample(self.train_audio_paths, k_samples)
         feats = [self.featurize(s) for s in samples]
         feats = np.vstack(feats)
+        meanie = np.mean(feats, axis=0)
         self.feats_mean = np.mean(feats, axis=0)
         self.feats_std = np.std(feats, axis=0)
-        return self.feats_mean
+        return meanie
         
         
     def featurize(self, audio_clip):
