@@ -228,6 +228,7 @@ class AudioGenerator():
         feats = np.vstack(feats)
         self.feats_mean = np.mean(feats, axis=0)
         self.feats_std = np.std(feats, axis=0)
+        return self.feats_mean
         
         
     def featurize(self, audio_clip):
