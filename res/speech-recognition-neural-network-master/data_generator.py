@@ -228,7 +228,7 @@ class AudioGenerator():
         feats = np.vstack(feats)
         self.feats_mean = np.mean(feats, axis=0)
         self.feats_std = np.std(feats, axis=0)
-        return self.feats_std
+        
         
     def featurize(self, audio_clip):
         """ For a given audio clip, calculate the corresponding feature
@@ -248,8 +248,7 @@ class AudioGenerator():
         Params:
             feature (numpy.ndarray): Feature to normalize
         """
-        #return (feature - self.feats_mean) / (self.feats_std + eps)
-        return (feature) / (eps)
+        return (feature - self.feats_mean) / (self.feats_std + eps)
 
     def shuffle_data(audio_paths, durations, texts):
         """ Shuffle the data (called after making a complete pass through 
