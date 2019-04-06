@@ -4,7 +4,7 @@ import wave
 from abc import ABC, abstractmethod
 import yaml
 
-with open("../conf/config.yaml", 'r') as stream:
+with open("../conf/constants.yaml", 'r') as stream:
     try:
         CONF = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
@@ -44,7 +44,7 @@ class DeepSpeechEngine(SpeechRecognizerBase):
         self.ds.enableDecoderWithLM(alphabet_path, lm_path, trie_path, LM_ALPHA, LM_BETA)
         
         lm_load_end = timer() - lm_load_start
-        logger.info('Loaded language model in {:.3}s.'.format(lm_load_end))
+        logger.info('[1.b] Loaded language model in {:.3}s.'.format(lm_load_end))
 
 
     def infer(self, file_path):
@@ -63,7 +63,7 @@ class DeepSpeechEngine(SpeechRecognizerBase):
 
         inf = self.ds.stt(audio, fs) 
         inference_end = timer() - inference_start
-        logger.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+        logger.info('[2] Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
         
         return (file_path, inf)
         conn_two.send(file_path+"$$"+inf)

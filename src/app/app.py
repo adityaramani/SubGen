@@ -1,9 +1,4 @@
-"""
-A simple example for VLC python bindings using PyQt5.
 
-Author: Saveliy Yusufov, Columbia University, sy2685@columbia.edu
-Date: 25 December 2018
-"""
 import logging
 import platform
 import os
