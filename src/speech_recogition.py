@@ -107,9 +107,27 @@ class SphinxEngine(SpeechRecognizerBase):
         # logger.info('Loaded language model in {:.3}s.'.format(lm_load_end))
 
     def infer (self, file_path):
-        pass
-        #fill this
+        fin = wave.open(file_path, 'rb')
+        audio_length = fin.getnframes() * (1/16000)
+        fin.close()
+          
+        inference_start = timer()
+        
+        inf = subprocess.run(["pocketsphinx_continuous"
+                                ,"-hmm"," \'"+CONF["sphinx.hmmpath"]+"\'"
+                                ,"-lm","\'"+CONF["sphinx.lmpath"]+"\'"
+                                ,"-dict","\'"+CONF["sphinx.dictpath"]+"\'"
+                                ,"-infile",file_path,
+                                "|","awk","-F","\'\n\'","\'{print $F[-1]}\'"])
+        
+        inference_end = timer() - inference_start
+        
+        logger.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
 
+        return (file_path,inf)
+
+        conn_two.send(file_path+"$$"+inf)
+        os.kill(pid,signal.SIGXFSZ)
 
 
 
