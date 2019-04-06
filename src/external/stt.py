@@ -30,10 +30,6 @@ class ExtractAudio(threading.Thread):
         self.audio_length = audio_length
         self.buffer = buffer
 
-        # self.audio_length = int(float(subprocess.run(["ffprobe" ,"-i" , self.audio_path ,
-        #                                 "-show_entries","format=duration", "-v" ,"quiet" ,"-of" ,'csv=p=0'],
-        #                                 stdout=subprocess.PIPE).stdout.decode('utf-8').strip()))
-
     
     def extract_audio (self):
         logger.debug("Starting Extarct")
@@ -42,7 +38,7 @@ class ExtractAudio(threading.Thread):
         intermediate_name = self.start_point
 
         end_point = min(self.start_point + SPLIT_INTERVAL * self.buffer ,self.audio_length-SPLIT_INTERVAL)
-
+        logger.debug("Start Point = " + str(self.start_point) + "  End Point = " + str(end_point))
         for i in range(self.start_point, end_point, SPLIT_INTERVAL):
             subprocess.run(["ffmpeg","-nostats", "-loglevel", "0" 
                             ,"-ss",str(i), "-i" , self.audio_path 
@@ -85,7 +81,7 @@ class SyncDaemon(object):
         self.conn   = Client(address)
 
         ExtractAudio(self.audio_path,self.audio_length, SPLIT_INTERVAL).start()
-        self.add_to_extracted(10,3)
+        self.add_to_extracted(SPLIT_INTERVAL,3)
         
         self.args       = args
         self.kwargs     = kwargs
@@ -97,7 +93,7 @@ class SyncDaemon(object):
         msg = self.conn.recv()
         f , inference  = msg.split("$$")
         f = int(f[9:][:-4])
-        print( "f = " ,f)
+        logger.debug("Recevied Message from SRE : [" + str(f) + "] : ["+ inference+"]")
         self.subs_text[f] = inference
 
     def fill_buffers(self, start):
@@ -105,15 +101,15 @@ class SyncDaemon(object):
         buff = 3
         for i in range(start, buffer_length, SPLIT_INTERVAL):
             if i not in self.extracted_chunks:
+                logger.debug("Filling Buffer Text for Timestamp [" + str(i)+"]" + "for "+ str(buff) + " Split Intervals" )
                 ExtractAudio(self.audio_path,self.audio_length, i, buff).start()
-                self.add_to_extracted(i,buff  )
-
+                self.add_to_extracted(i,buff)
                 break            
+
             buff -=1
 
 
     def set_subtitles(self,rounded):
-        print(self.subs_text,rounded, type(rounded))
         if rounded not in self.subs_text:
             self.subs_box.setText("<NA>")
             return
@@ -128,13 +124,14 @@ class SyncDaemon(object):
     def monitor(self):
         timestamp = int(self.media_player.get_position() * self.audio_length)
         rounded = timestamp - (timestamp % SPLIT_INTERVAL)
-
+        logger.debug("Rounded  = "  +str(rounded))
+        if rounded < 0:
+            return
         if rounded not in self.extracted_chunks:
             ExtractAudio(self.audio_path,self.audio_length, rounded).start()
             self.add_to_extracted(rounded,3)
             return
 
-        print("Rounded in self extracted " , rounded, type(rounded))
         self.set_subtitles(rounded)
         self.fill_buffers(rounded) 
     

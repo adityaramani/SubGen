@@ -1,5 +1,5 @@
-trans = open("/Users/aramani/Documents/project/scripts/dataset/indic_sphinx/etc/indic_test.transcription")
-fileids = open("/Users/aramani/Documents/project/scripts/dataset/indic_sphinx/etc/indic_test.fileids")
+trans = open("/home/aditya/Desktop/indic_train.transcription")
+fileids = open("/home/aditya/Desktop/indic_train.fileids")
 
 
 for t in trans:

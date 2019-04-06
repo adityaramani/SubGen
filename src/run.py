@@ -41,26 +41,3 @@ writePidFile()
 
 app.main()
 
-
-
-
-# import vlc
-# i=vlc.Instance( '--fullscreen')
-
-# p=i.media_player_new()
-# m=i.media_new('file:////Users/aramani/Downloads/France vs Argentina 4-3 All Goals and Extended Highlights w- English Commentary (World Cup) 2018 HD.mp4')
-# m.get_mrl()
-# p.set_media(m)
-
-# if sys.platform == "darwin":
-#     from PyQt5 import QtWidgets
-#     # from PyQt5 import QtGui
-#     import sys
-
-#     vlcApp =QtWidgets.QApplication(sys.argv)
-#     vlcWidget = QtWidgets.QFrame()
-#     vlcWidget.resize(700,700)
-#     vlcWidget.show()
-#     p.set_nsobject(int(vlcWidget.winId()))
-
-# p.play()
