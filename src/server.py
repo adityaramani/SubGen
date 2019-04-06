@@ -12,11 +12,12 @@ import logging
 from deepspeech import Model
 from timeit import default_timer as timer
 import time
+import argparse
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from timeit import default_timer as timer
 
-
+from speech_recogition import *
 try:
     from shhlex import quote
 except ImportError:
@@ -37,6 +38,23 @@ logging.basicConfig(filename="../logs/server.log",filemode='a',level=logging.DEB
 logger  = logging.getLogger("Speech Recognizer")
 
 
+parser = argparse.ArgumentParser(description='Offline Subtitle Generation for videos')
+parser.add_argument('-b', '--backend', help='Speech Recognition backend.' ,choices = ["DS", "RNN", "SPHINX"])
+__args__ = parser.parse_args()
+
+
+
+if __args__['backend'] == "DS":
+    backend = DeepSpeechEngine()
+
+elif __args__['backend'] == "SPHINX":
+    backend = SphinxEngine()
+
+else :
+    backend  = RNNEngine()
+
+
+
 def writePidFile():
     pid = str(os.getpid())
     f = open('../tmp/recognizer.pid', 'w')
@@ -52,30 +70,6 @@ seen = set({})
 
 
 
-def infer(file_path):
-    fin = wave.open(file_path, 'rb')
-    fs = fin.getframerate()
-    if fs != 16000:
-        logger.info('Warning: original sample rate ({}) is different than 16kHz. Resampling might produce erratic speech recognition.'.format(fs))
-        fs, audio = convert_samplerate(audio_path)
-    else:
-        audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
-
-    audio_length = fin.getnframes() * (1/16000)
-    fin.close()
-
-    inference_start = timer()
-
-    inf = ds.stt(audio, fs) 
-    
-    
-    logger.info("Inference  = " + inf)
-
-    conn_two.send(file_path+"$$"+inf)
-    os.kill(pid,signal.SIGXFSZ)
-
-    inference_end = timer() - inference_start
-    logger.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
 
 
 class Worker(threading.Thread):
@@ -90,8 +84,10 @@ class Worker(threading.Thread):
             except queue.Empty:
                 continue
             logging.debug("Infering File  :" + p)
-            infer(p)
-
+            
+            file_path , inf = backend.infer(p)
+            conn_two.send(file_path+"$$"+inf)
+            os.kill(pid,signal.SIGXFSZ)
             self.q.task_done()
 
 
@@ -141,20 +137,6 @@ watcher.start()
 
 worker = Worker(q)
 worker.start()
-
-
-logger.info('Loading model from file {}'.format(model_path))
-model_load_start = timer()
-ds = Model(model_path, N_FEATURES, N_CONTEXT, alphabet_path, BEAM_WIDTH)
-model_load_end = timer() - model_load_start
-logger.info('Loaded model in {:.3}s.'.format(model_load_end))
-
-
-logger.info('Loading language model from files {} {}'.format(lm_path, trie_path))
-lm_load_start = timer()
-ds.enableDecoderWithLM(alphabet_path, lm_path, trie_path, LM_ALPHA, LM_BETA)
-lm_load_end = timer() - lm_load_start
-logger.info('Loaded language model in {:.3}s.'.format(lm_load_end))
 
 
 

@@ -30,11 +30,6 @@ class ExtractAudio(threading.Thread):
         self.audio_length = audio_length
         self.buffer = buffer
 
-        # self.audio_length = int(float(subprocess.run(["ffprobe" ,"-i" , self.audio_path ,
-        #                                 "-show_entries","format=duration", "-v" ,"quiet" ,"-of" ,'csv=p=0'],
-        #                                 stdout=subprocess.PIPE).stdout.decode('utf-8').strip()))
-
-    
     def extract_audio (self):
         logger.debug("Starting Extarct")
         start_time  = ts = timer()
@@ -156,8 +151,3 @@ class SyncDaemon(object):
     def interrupt(self):
         self.stop()
 
-
-
-
-if __name__ == "__main__":
-    ExtractAudio(["/home/aditya/Downloads/indian.mp4"]).start()
