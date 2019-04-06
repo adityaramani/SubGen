@@ -250,7 +250,8 @@ class AudioGenerator():
         Params:
             feature (numpy.ndarray): Feature to normalize
         """
-        return (feature - self.feats_mean) / (self.feats_std + eps)
+        #return (feature - self.feats_mean) / (self.feats_std + eps)
+        return (feature) / (eps)
 
 def shuffle_data(audio_paths, durations, texts):
     """ Shuffle the data (called after making a complete pass through 
