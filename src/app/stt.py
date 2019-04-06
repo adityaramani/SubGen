@@ -51,19 +51,17 @@ class ExtractAudio(threading.Thread):
                             , "-ac" ,"1" ,#'-af', 'highpass=f=200, lowpass=f=800',
                             "-vn" ,"/tmp/stt/" + str(i)+".wav", "-y"])
             now = timer()
-            logger.debug("Chunk " +  str(i)+" in {}s ".format(  now -ts))
+            logger.debug("[1] Extracted Chunk {} from {} of size {} in {}s ".format( i,self.audio_path,SPLIT_INTERVAL ,now -ts))
             ts = now
             
             intermediate_name+=1
         
-        logger.debug("Finished Extarcting  in {:.3}s ".format(timer() - start_time))
+        logger.debug("[2] Finished Extarcting Audio from file {} of lenght {} in {:.3}s "
+                                            .format(self.audio_path,self.audio_length,timer() - start_time))
     
 
     def run(self):
-        
         self.extract_audio()
-
-
 
 
 
@@ -97,7 +95,7 @@ class SyncDaemon(object):
         msg = self.conn.recv()
         f , inference  = msg.split("$$")
         f = int(f[9:][:-4])
-        print( "f = " ,f)
+        # print( "f = " ,f)
         self.subs_text[f] = inference
 
     def fill_buffers(self, start):
@@ -134,7 +132,7 @@ class SyncDaemon(object):
             self.add_to_extracted(rounded,3)
             return
 
-        print("Rounded in self extracted " , rounded, type(rounded))
+        # print("Rounded in self extracted " , rounded, type(rounded))
         self.set_subtitles(rounded)
         self.fill_buffers(rounded) 
     

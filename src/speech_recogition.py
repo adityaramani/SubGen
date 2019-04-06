@@ -12,6 +12,7 @@ with open("../conf/config.yaml", 'r') as stream:
         exit(-1)
 
 
+logger = logging.getLogger("speech_recognition")
 
 class SpeechRecognizerBase(ABC):
 
@@ -34,7 +35,7 @@ class DeepSpeechEngine(SpeechRecognizerBase):
         self.ds = Model(CONF["ds.model_path"],   CONF["ds.N_FEATURES"],   CONF["ds.N_CONTEXT"],   CONF["ds.alphabet_path"],   CONF["ds.BEAM_WIDTH"])
         
         model_load_end = timer() - model_load_start
-        logger.info('Loaded model in {:.3}s.'.format(model_load_end))
+        logger.info('[1] Loaded model in {:.3}s.'.format(model_load_end))
 
 
         logger.info('Loading language model from files {} {}'.format(lm_path, trie_path))

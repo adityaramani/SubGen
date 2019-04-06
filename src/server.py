@@ -31,7 +31,8 @@ from multiprocessing.connection import Listener
 
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
-logging.basicConfig(level=logging.INFO,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [%(process)d] %(message)s')
+
+logging.basicConfig(filename="../logs/server.log",filemode='a',level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [%(process)d] %(message)s')
 
 logger  = logging.getLogger("Speech Recognizer")
 
