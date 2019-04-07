@@ -1,0 +1,58 @@
+{
+    "file stats": {
+
+        "type": "string",
+        "desc": "path to input file",
+        "delimiter": "::",
+        "csv_path": "/stats/Qosproc_Stats.csv",
+        "fields" : ["time taken", "beacons processed", "beacons failed", "input lines"],
+        "field_mdt": {
+            
+                "time taken": {
+                    "type": "int",
+                    "desc": "time taken to process te file"
+                },
+            
+            
+                "beacons processed": {
+                    "type": "int",
+                    "desc": "number of beacons processed successfully"
+                },
+        
+            
+                "beacons failed": {
+                    "type": "int",
+                    "desc": "number of beacons that failed"
+                },
+            
+                "input lines": {
+                    "type": "int",
+                    "desc": "number of lines in the file"
+                }
+            }
+        
+    },
+
+    "test stats":{
+        "type": "string",
+        "desc": "path to input file",
+        "delimiter": "::",
+        "csv_path": "/stats/test.csv",
+        "fields" : ["key1", "key2", "key3"],
+        "field_mdt": {
+                "key1": {
+                    "type": "int",
+                    "desc": "time taken to process te file"
+                },
+                "key2": {
+                    "type": "int",
+                    "desc": "number of beacons processed successfully"
+                },
+            
+                "key3": {
+                    "type": "int",
+                    "desc": "number of beacons that failed"
+                }
+            }
+    }
+}
