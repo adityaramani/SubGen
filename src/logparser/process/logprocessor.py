@@ -41,12 +41,12 @@ class LogProcessor():
     def is_line_primary(self, line):
         for ind , delimiter in enumerate(self.delimiters):
             if delimiter in line:
-                logger.debug("Checking Primary key in line : " + line)
                 l = list(map(lambda x: x.strip(), line.split(delimiter)))
-                print(l)
                 key = l[0]
                 val = l[1]
                 if self.keys[ind]  == key:
+                    logger.debug("Found Primary key in line : " + line  + "For key " + key)
+
                     return key , val
         
         return None,None

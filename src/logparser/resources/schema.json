@@ -1,7 +1,7 @@
 {
     "Extracted_Chunk": {
 
-        "type": "string",
+        "type": "Stringing",
         "desc": "chunk number",
         "delimiter": "::",
         "csv_path":  "/tmp/1.csv",
@@ -9,7 +9,7 @@
         "field_mdt": {
             
                 "Audio_Path": {
-                    "type": "string",
+                    "type": "Stringing",
                     "desc": "path to audio file"
                 },
             
@@ -30,7 +30,7 @@
     },
 
     "Subset_Extracted_Path":{
-        "type": "string",
+        "type": "Stringing",
         "desc": "path to input file",
         "delimiter": "::",
         "csv_path":  "/tmp/2.csv",
@@ -59,7 +59,7 @@
         "fields" : ["Model_Type"],
         "field_mdt": {
                 "Model_Type": {
-                    "type": "String",
+                    "type": "Stringing",
                     "desc": "Backend type"
                 }
                 
@@ -82,10 +82,67 @@
 
             
                 "Model_Type": {
-                    "type": "String",
+                    "type": "Stringing",
                     "desc": "Backend type"
                 }
                 
             }
-    }
+    },
+
+
+    "Player_Stats": {
+        "type": "String",
+        "csv_path":  "/tmp/5.csv",
+        "desc": "----",
+        "delimiter": "::",
+        "fields" : ["read_bytes","input_bitrate","demux_read_bytes","demux_bitrate","demux_corrupted"
+                    ,"demux_discontinuity","decoded_video","decoded_audio","displayed_pictures",
+                    "lost_pictures","played_abuffers","lost_abuffers","sent_packets"
+                    ,"sent_bytes","send_bitrate"],
+        
+        "field_mdt": {
+            
+            "read_bytes": {  
+            
+                "type" : "String" ,
+                "desc" : "stat"
+            },
+            "input_bitrate": {  
+             
+                "type" : "String" ,
+                "desc" : "stat "
+            },
+            
+            "demux_read_bytes": {  
+            "type" : "String" , "desc" : "stat "},
+            "demux_bitrate": {  
+             "type" : "String" , "desc" : "stat "},
+            "demux_corrupted": {  
+             "type" : "String" , "desc" : "stat "},
+            "demux_discontinuity": {  
+             "type" : "String" , "desc" : "stat "},
+            "decoded_video": {  
+             "type" : "String" , "desc" : "stat "},
+            "decoded_audio": {  
+             "type" : "String" , "desc" : "stat "},
+            "displayed_pictures'": {  
+             "type" : "String" , "desc" : "stat "},
+            "lost_pictures": {  
+             "type" : "String" , "desc" : "stat "},
+            "played_abuffers": {  
+             "type" : "String" , "desc" : "stat "},
+            "lost_abuffers": {  
+             "type" : "String" , "desc" : "stat "},
+            "sent_packets": {  
+             "type" : "String" , "desc" : "stat "},
+            "sent_bytes": {  
+             "type" : "String" , "desc" : "stat "},
+            "send_bitrate" : {
+            "type" : "String" , "desc" : "stat "}
+        }
+        }
+
+
+
+    
 }

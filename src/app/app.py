@@ -4,7 +4,8 @@ import platform
 import os
 import sys
 import signal
-
+from time import sleep
+import threading
 
 from .stt import SyncDaemon
 
@@ -28,14 +29,8 @@ class Player(QtWidgets.QMainWindow):
         self.media = ""
         # Create an empty vlc media player
         self.mediaplayer = self.instance.media_player_new()
-
         self.create_ui()
         self.is_paused = False
-
-
-        
-        
-
 
 
     def create_ui(self):
@@ -177,6 +172,8 @@ class Player(QtWidgets.QMainWindow):
         # Put the media in the media player
         self.mediaplayer.set_media(self.media)
         self.SyncDaemon = SyncDaemon(3,filename[0], self.mediaplayer, self.subsBox)
+        StatsReporter(self.media).start()
+
 
 
         # Parse the metadata of the file
@@ -237,6 +234,24 @@ class Player(QtWidgets.QMainWindow):
             # This fixes that "bug".
             if not self.is_paused:
                 self.stop()
+
+
+class StatsReporter(threading.Thread):
+    def __init__(self, media):
+        threading.Thread.__init__(self)
+        self.media = media
+        self.stats = vlc.MediaStats()
+
+    def parse_stats(self):
+        logger.info("Player_Stats :: Start")
+        for stat in self.stats._fields_:
+           logger.info("{} :: {}".format(stat[0],getattr(self.stats,stat[0])))
+   
+    def run(self):
+        while True:
+            self.media.get_stats(self.stats)
+            self.parse_stats()
+            sleep(2)
 
 def main():
     """Entry point for our simple vlc player
