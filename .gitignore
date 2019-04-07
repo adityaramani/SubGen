@@ -123,3 +123,5 @@ dmypy.json
 vlc_src/
 tmp/
 res/speech-recognition-neural-network-master/results/
+src/logparser/work/processed.txt
+src/logparser/work/.output.json.swp
