@@ -19,9 +19,13 @@ ds.alphabet_path : "/home/aditya/Documents/project/indian_model/prebuilt/deepspe
 ds.lm_path : "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/lm.binary"
 ds.trie_path : "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/trie"
 
-sphinx.hmmpath : "/home/ramaniaditya22/data/en-in-adapt/en-in"
-sphinx.hmmpath2 : "/home/ramaniaditya22/indic.falign_ci_ptm"
-sphinx.lmpath : "/home/ramaniaditya22/data/en-in-adapt/en-us.lm.bin"
-sphinx.lmpath2 : "/home/ramaniaditya22/indic.lm.DMP"
-sphinx.dictpath : "/home/ramaniaditya22/data/en-in-adapt/en_in.dic"
-sphinx.dictpath2 : "/home/ramaniaditya22/data/indic.dic"
+sphinx.hmmpath : "/home/aditya/Downloads/new_model/indic.falign_ci_ptm"
+
+# sphinx.hmmpath2 : "/home/ramaniaditya22/indic.falign_ci_ptm"
+
+sphinx.lmpath : "/home/aditya/Downloads/new_model/indic.lm.DMP"
+# sphinx.lmpath2 : "/home/ramaniaditya22/indic.lm.DMP"
+
+sphinx.dictpath : "/home/aditya/Downloads/new_model/indic.dic"
+
+# sphinx.dictpath2 : "/home/ramaniaditya22/data/indic.dic"

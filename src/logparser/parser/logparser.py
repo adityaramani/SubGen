@@ -1,9 +1,9 @@
 import logging
-
+import json
 logger = logging.getLogger("Parser")
 
 def strip_meta(line):
-	ind = line.find("]")
+	ind = line.find("@")
 	if ind == -1:
 		return None
 	msg = line[ind+1:]
@@ -26,8 +26,8 @@ class LogParser():
 		line  = strip_meta(line)
 		if self.delimiter in line:
 			l = list(map(lambda x: x.strip(), line.split(self.delimiter)))
-            key = l[0]
-            val = l[1]
+			key = l[0]
+			value = l[1]
 			if primary_key:
 				self.reset_store()
 				self.__store__(key, value)
@@ -52,5 +52,5 @@ class LogParser():
 		self.__data_store__ = dict({})
 
 	def flush(self):
-		return self.__flush__(self.pk, self.csv_path,self.__data_store__)
+		return self.__flush__( json.dumps(self.__data_store__)+',\n')
 

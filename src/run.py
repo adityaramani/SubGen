@@ -26,7 +26,7 @@ if __args__.debug:
 
 
 if __args__.debug:
-    logging.basicConfig(filename="../logs/player.log",filemode='a',level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [%(thread)d] %(message)s')
+    logging.basicConfig(filename="../logs/player.log",filemode='w',level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [ %(thread)d ]@ %(message)s')
     # logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
     # print(logging.getLogger().handlers)
 else:

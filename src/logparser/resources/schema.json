@@ -1,58 +1,91 @@
 {
-    "file stats": {
+    "Extracted_Chunk": {
 
         "type": "string",
-        "desc": "path to input file",
+        "desc": "chunk number",
         "delimiter": "::",
-        "csv_path": "/stats/Qosproc_Stats.csv",
-        "fields" : ["time taken", "beacons processed", "beacons failed", "input lines"],
+        "csv_path":  "/tmp/1.csv",
+        "fields" : ["Audio_Path", "Chunk_Size", "Time_Taken"],
         "field_mdt": {
             
-                "time taken": {
-                    "type": "int",
-                    "desc": "time taken to process te file"
+                "Audio_Path": {
+                    "type": "string",
+                    "desc": "path to audio file"
                 },
             
             
-                "beacons processed": {
+                "Chunk_Size": {
                     "type": "int",
-                    "desc": "number of beacons processed successfully"
+                    "desc": "Audio length"
                 },
         
             
-                "beacons failed": {
+                "Time_Taken": {
                     "type": "int",
-                    "desc": "number of beacons that failed"
-                },
-            
-                "input lines": {
-                    "type": "int",
-                    "desc": "number of lines in the file"
+                    "desc": "time taken"
                 }
+            
             }
         
     },
 
-    "test stats":{
+    "Subset_Extracted_Path":{
         "type": "string",
         "desc": "path to input file",
         "delimiter": "::",
-        "csv_path": "/stats/test.csv",
-        "fields" : ["key1", "key2", "key3"],
+        "csv_path":  "/tmp/2.csv",
+
+        "fields" : ["Subset_Extracted_Length", "Time_Taken"],
         "field_mdt": {
-                "key1": {
+                "Subset_Extracted_Length": {
                     "type": "int",
-                    "desc": "time taken to process te file"
+                    "desc": "Subset Length"
                 },
-                "key2": {
+                "Time_Taken": {
                     "type": "int",
                     "desc": "number of beacons processed successfully"
-                },
-            
-                "key3": {
-                    "type": "int",
-                    "desc": "number of beacons that failed"
                 }
+            
+                
+            }
+    },
+
+    "Model_Load_Time":{
+        "type": "int",
+        "csv_path":  "/tmp/3.csv",
+
+        "desc": "Time taken to load model",
+        "delimiter": "::",
+        "fields" : ["Model_Type"],
+        "field_mdt": {
+                "Model_Type": {
+                    "type": "String",
+                    "desc": "Backend type"
+                }
+                
+            }
+    },
+
+
+
+    "Inference_Time":{
+        "type": "int",
+        "csv_path":  "/tmp/4.csv",
+        "desc": "Time taken to infer audio",
+        "delimiter": "::",
+        "fields" : ["Audio_Length","Model_Type"],
+        "field_mdt": {
+            "Audio_Length" : {
+                "type" : "int",
+                "desc" : "Length of file"
+            },
+
+            
+                "Model_Type": {
+                    "type": "String",
+                    "desc": "Backend type"
+                }
+                
             }
     }
 }

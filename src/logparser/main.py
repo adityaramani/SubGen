@@ -3,7 +3,6 @@ import argparse
 import logging
 import json
 import process.logprocessor as logprocessor
-import publisher.rest_publisher as rest_publisher
 import os
 import pathlib
 import time
@@ -33,7 +32,6 @@ logger = logging.getLogger("MainLogger")
 
 schema = json.load(open(__args__.schema, 'r'))
 
-rp = rest_publisher.RestPublisher(schema,__args__.report_url)
 
 
 if __args__.write_schema :
@@ -56,12 +54,14 @@ def find_processed_files():
 
 starttime=time.time()
 
-lp  = logprocessor.LogProcessor(json.load(open(__args__.schema)), rp.write_data)
+writter = open("work/output.json", 'a')
+
+lp  = logprocessor.LogProcessor(json.load(open(__args__.schema)), writter.write)
 
 while True:
 
     files_work_dir  =  map(lambda x: x.strip(), next(os.walk(__args__.work_dir))[2])
-    qosproc_log_files  = set(filter( lambda x:  'qosproc' in x and 'log' in x, files_work_dir))
+    qosproc_log_files  = set(filter( lambda x: 'log' in x, files_work_dir))
     
     processed_files = set( map(lambda x : x.strip(),find_processed_files()))
     logger.info("Processed Files = " + str(processed_files))
@@ -77,7 +77,9 @@ while True:
                 lp.read_line(line)
 
         op.write(log_file+'\n')
-    logger.info("sleeping")
-    time.sleep(300.0 - ((time.time() - starttime) % 300.0))
-    logger.info("Wake")
+
     op.close()
+    break
+
+
+writter.close()

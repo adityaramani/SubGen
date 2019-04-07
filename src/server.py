@@ -23,9 +23,13 @@ try:
 except ImportError:
     from pipes import quote
 
-from  constants import *
 import os
 import signal
+
+from pathlib import Path
+
+Path("/tmp/stt").mkdir(exist_ok=True)
+
 
 from multiprocessing.connection import Listener
 
@@ -33,21 +37,21 @@ from multiprocessing.connection import Listener
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 
-logging.basicConfig(filename="../logs/server.log",filemode='a',level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [%(process)d] %(message)s')
+logging.basicConfig(filename="../logs/server.log",filemode='w',level=logging.DEBUG,format='%(asctime)s %(name)s.%(funcName)s +%(lineno)s: %(levelname)-2s [ %(process)d ]@ %(message)s ')
 
 logger  = logging.getLogger("Speech Recognizer")
 
 
 parser = argparse.ArgumentParser(description='Offline Subtitle Generation for videos')
-parser.add_argument('-b', '--backend', help='Speech Recognition backend.' ,choices = ["DS", "RNN", "SPHINX"])
+parser.add_argument('-b', '--backend', help='Speech Recognition backend.',required = True ,choices = ["DS", "RNN", "SPHINX"])
 __args__ = parser.parse_args()
 
 
 
-if __args__['backend'] == "DS":
+if __args__.backend == "DS":
     backend = DeepSpeechEngine()
 
-elif __args__['backend'] == "SPHINX":
+elif __args__.backend == "SPHINX":
     backend = SphinxEngine()
 
 else :

@@ -2,8 +2,10 @@ import logging
 from deepspeech import Model
 import wave
 from abc import ABC, abstractmethod
+from timeit import default_timer as timer
+import numpy as np
 import yaml
-
+import subprocess
 with open("../conf/constants.yaml", 'r') as stream:
     try:
         CONF = yaml.safe_load(stream)
@@ -17,7 +19,7 @@ logger = logging.getLogger("speech_recognition")
 class SpeechRecognizerBase(ABC):
 
     @abstractmethod
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):    
         pass
 
 
@@ -29,19 +31,21 @@ class SpeechRecognizerBase(ABC):
 class DeepSpeechEngine(SpeechRecognizerBase):
 
     def __init__(self, *args, **kwargs):
-        logger.info('Loading model from file {}'.format(model_path))
+        logger.info('Loading model from file {}'.format(CONF["ds.model_path"]))
         model_load_start = timer()
         
         self.ds = Model(CONF["ds.model_path"],   CONF["ds.N_FEATURES"],   CONF["ds.N_CONTEXT"],   CONF["ds.alphabet_path"],   CONF["ds.BEAM_WIDTH"])
         
         model_load_end = timer() - model_load_start
-        logger.info('[1] Loaded model in {:.3}s.'.format(model_load_end))
+        logger.info('Loaded model in {:.3}s.'.format(model_load_end))
+        logger.info('Model_Load_Time :: {:.3}.'.format(model_load_end))
+        logger.info('Model_Type :: Deepspeech')
 
 
-        logger.info('Loading language model from files {} {}'.format(lm_path, trie_path))
+        logger.info('Loading language model from files {} {}'.format(CONF["ds.lm_path"], CONF["ds.trie_path"]))
         lm_load_start = timer()
         
-        self.ds.enableDecoderWithLM(alphabet_path, lm_path, trie_path, LM_ALPHA, LM_BETA)
+        self.ds.enableDecoderWithLM( CONF["ds.alphabet_path"], CONF["ds.lm_path"], CONF["ds.trie_path"], CONF["ds.LM_ALPHA"], CONF["ds.LM_BETA"])
         
         lm_load_end = timer() - lm_load_start
         logger.info('[1.b] Loaded language model in {:.3}s.'.format(lm_load_end))
@@ -65,10 +69,13 @@ class DeepSpeechEngine(SpeechRecognizerBase):
         inference_end = timer() - inference_start
         logger.info('[2] Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
         
-        return (file_path, inf)
-        conn_two.send(file_path+"$$"+inf)
-        os.kill(pid,signal.SIGXFSZ)
+        logger.info('Inference_Time :: %0.3f' % (inference_end))
+        logger.info('Audio_Length :: %0.3f' % (audio_length))
+        logger.info('Model_Type :: Deepspeech')
 
+        
+        return (file_path, inf)
+        
 
     def convert_samplerate(self, audio_path):
         sox_cmd = 'sox {} --type raw --bits 16 --channels 1 --rate 16000 --encoding signed-integer --endian little --compression 0.0 --no-dither - '.format(quote(audio_path))
@@ -89,14 +96,13 @@ class SphinxEngine(SpeechRecognizerBase):
 
     
     def __init__(self, *args, **kwargs):
-        logger.info('Loading model from file {}'.format(model_path))
+        logger.info('Loading model from file {}'.format(CONF["sphinx.hmmpath"]))
         model_load_start = timer()
         
         # self.ds = Model(CONF["ds.model_path"],   CONF["ds.N_FEATURES"],   CONF["ds.N_CONTEXT"],   CONF["ds.alphabet_path"],   CONF["ds.BEAM_WIDTH"])
         
         model_load_end = timer() - model_load_start
         logger.info('Loaded model in {:.3}s.'.format(model_load_end))
-
 
         # logger.info('Loading language model from files {} {}'.format(lm_path, trie_path))
         # lm_load_start = timer()        
@@ -114,20 +120,28 @@ class SphinxEngine(SpeechRecognizerBase):
         inference_start = timer()
         
         inf = subprocess.run(["pocketsphinx_continuous"
-                                ,"-hmm"," \'"+CONF["sphinx.hmmpath"]+"\'"
-                                ,"-lm","\'"+CONF["sphinx.lmpath"]+"\'"
-                                ,"-dict","\'"+CONF["sphinx.dictpath"]+"\'"
-                                ,"-infile",file_path,
-                                "|","awk","-F","\'\n\'","\'{print $F[-1]}\'"])
-        
+                                ,"-hmm",CONF["sphinx.hmmpath"]
+                                ,"-lm",CONF["sphinx.lmpath"]
+                                ,"-dict",CONF["sphinx.dictpath"]
+                                ,"-infile",file_path],stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+
+                                # "|","awk","-F","\'\n\'","\'{print $F[-1]}\'"
+        inf = inf.split()
+
+        inf = ' '.join( filter(lambda x : not x.startswith("INFO") and not x.startswith("-"), inf))
+
+        print(inf)
+
         inference_end = timer() - inference_start
         
         logger.info('Inference took %0.3fs for %0.3fs audio file.' % (inference_end, audio_length))
+        logger.info('Inference_Time :: %0.3f' % (inference_end))
+        logger.info('Audio_Length :: %0.3f' % (audio_length))
+        logger.info('Model_Type :: Deepspeech')
+
+        
 
         return (file_path,inf)
-
-        conn_two.send(file_path+"$$"+inf)
-        os.kill(pid,signal.SIGXFSZ)
 
 
 

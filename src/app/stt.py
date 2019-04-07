@@ -23,7 +23,6 @@ class ExtractAudio(threading.Thread):
 
     def __init__(self, audio_path,audio_length,start_point,buffer=3):
         threading.Thread.__init__(self)
-        Path("/tmp/stt").mkdir(exist_ok=True)
        
         self.start_point  = start_point
         self.audio_path = audio_path
@@ -47,13 +46,22 @@ class ExtractAudio(threading.Thread):
                             "-vn" ,"/tmp/stt/" + str(i)+".wav", "-y"])
             now = timer()
             logger.debug("[1] Extracted Chunk {} from {} of size {} in {}s ".format( i,self.audio_path,SPLIT_INTERVAL ,now -ts))
+            logger.debug("Extracted_Chunk :: {}".format(i))
+            logger.debug("Audio_Path :: {}".format(self.audio_path))
+            logger.debug("Chunk_Size :: {}".format(SPLIT_INTERVAL))
+            logger.debug("Time_Taken :: {}".format(now - ts ))
+
+
             ts = now
             
             intermediate_name+=1
         
         logger.debug("[2] Finished Extarcting Audio from file {} of lenght {} in {:.3}s "
-                                            .format(self.audio_path,self.audio_length,timer() - start_time))
-    
+                                            .format(self.audio_path,(end_point-self.start_point)*SPLIT_INTERVAL,timer() - start_time))
+        logger.debug("Subset_Extracted_Path :: {}".format(self.audio_path))
+        logger.debug("Subset_Extracted_Length :: {}".format((end_point-self.start_point)*SPLIT_INTERVAL))
+        logger.debug("Time_Taken :: {}".format(timer() - start_time))
+
 
     def run(self):
         self.extract_audio()
@@ -106,7 +114,7 @@ class SyncDaemon(object):
 
 
     def set_subtitles(self,rounded):
-        print(self.subs_text,rounded, type(rounded))
+        # print(self.subs_text,rounded, type(rounded))
         if rounded not in self.subs_text:
             self.subs_box.setText("<NA>")
             return
@@ -121,6 +129,9 @@ class SyncDaemon(object):
     def monitor(self):
         timestamp = int(self.media_player.get_position() * self.audio_length)
         rounded = timestamp - (timestamp % SPLIT_INTERVAL)
+
+        if timestamp < 0:
+            return
 
         if rounded not in self.extracted_chunks:
             ExtractAudio(self.audio_path,self.audio_length, rounded).start()

@@ -5,7 +5,7 @@ from collections import defaultdict
 logger = logging.getLogger("Processor")
 
 def strip_meta(line):
-	ind = line.find("]")
+	ind = line.find("@")
 	if ind == -1:
 		return None
 	msg = line[ind+1:]
@@ -43,6 +43,7 @@ class LogProcessor():
             if delimiter in line:
                 logger.debug("Checking Primary key in line : " + line)
                 l = list(map(lambda x: x.strip(), line.split(delimiter)))
+                print(l)
                 key = l[0]
                 val = l[1]
                 if self.keys[ind]  == key:
@@ -51,12 +52,12 @@ class LogProcessor():
         return None,None
         
     def __get_TID__(self, line):
-        index = line.find(']')
+        index = line.find('@')
         if index  == -1:
             logger.info('Not a valid Log line' + line)
             return
 
-        return line[:index].split(' ')[2]
+        return line[:index].split(' ')[6]
         
     def read_line(self, line):
         
