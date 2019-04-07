@@ -8,9 +8,9 @@ fi;
 
 
 python -u DeepSpeech.py \
-  --train_files /content/SubGen/scripts/train.csv\
-  --dev_files /content/SubGen/scripts/dev.csv \
-  --test_files /content/SubGen/scripts/val.csv \
+  --train_files /content/SubGen/data/train.csv\
+  --dev_files /content/SubGen/data/dev.csv \
+  --test_files /content/SubGen/data/val.csv \
   --train_batch_size 12 \
   --dev_batch_size 12 \
   --test_batch_size 12 \
