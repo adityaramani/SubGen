@@ -37,7 +37,4 @@ logger = logging.getLogger("MainLogger")
 logger.debug("Started")
 writePidFile()
 
-
-
 app.main()
-

@@ -6,6 +6,7 @@ from timeit import default_timer as timer
 import numpy as np
 import yaml
 import subprocess
+
 with open("../conf/constants.yaml", 'r') as stream:
     try:
         CONF = yaml.safe_load(stream)

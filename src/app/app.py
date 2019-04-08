@@ -241,9 +241,10 @@ class StatsReporter(threading.Thread):
         threading.Thread.__init__(self)
         self.media = media
         self.stats = vlc.MediaStats()
+        self.count = 0
 
     def parse_stats(self):
-        logger.info("Player_Stats :: Start")
+        logger.info("Player_Stats :: {}".format(self.count))
         for stat in self.stats._fields_:
            logger.info("{} :: {}".format(stat[0],getattr(self.stats,stat[0])))
    
@@ -252,6 +253,7 @@ class StatsReporter(threading.Thread):
             self.media.get_stats(self.stats)
             self.parse_stats()
             sleep(2)
+            self.count += 2
 
 def main():
     """Entry point for our simple vlc player

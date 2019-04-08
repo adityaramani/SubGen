@@ -91,7 +91,7 @@
 
 
     "Player_Stats": {
-        "type": "String",
+        "type": "int",
         "csv_path":  "/tmp/5.csv",
         "desc": "----",
         "delimiter": "::",
@@ -140,9 +140,5 @@
             "send_bitrate" : {
             "type" : "String" , "desc" : "stat "}
         }
-        }
-
-
-
-    
+        }    
 }
