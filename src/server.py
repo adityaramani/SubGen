@@ -1,3 +1,13 @@
+import os
+def writePidFile():
+    pid = str(os.getpid())
+    f = open('../tmp/recognizer.pid', 'w')
+    f.write(pid)
+    f.close()
+
+
+writePidFile()
+
 
 import threading
 import argparse
@@ -16,14 +26,16 @@ import argparse
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from timeit import default_timer as timer
+# global graph
+# import tensorflow as tf
+# graph = tf.get_default_graph()
 
-from speech_recogition import *
+from speech_recognition.speech_recognition import *
 try:
     from shhlex import quote
 except ImportError:
     from pipes import quote
 
-import os
 import signal
 
 from pathlib import Path
@@ -58,15 +70,6 @@ else :
     backend  = RNNEngine()
 
 
-
-def writePidFile():
-    pid = str(os.getpid())
-    f = open('../tmp/recognizer.pid', 'w')
-    f.write(pid)
-    f.close()
-
-
-writePidFile()
 
 
 q = queue.Queue()

@@ -8,7 +8,7 @@ import pathlib
 import time
 
 
-parser = argparse.ArgumentParser(description='QOSPROC Log Parser and Publisher')
+parser = argparse.ArgumentParser(description='Log Parser ')
 parser.add_argument('-d', '--debug', default=False, action='store_true', help='Run in debug mode.')
 parser.add_argument('-p', '--work-dir', required=True, help='Path to log file to parse.')
 parser.add_argument('-r', '--report-url', help='Url to where the parsed data should be published')

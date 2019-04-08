@@ -2,7 +2,6 @@ import logging
 import argparse
 import sys
 import os
-from app import app
 
 def writePidFile():
     pid = str(os.getpid())
@@ -10,6 +9,9 @@ def writePidFile():
     f.write(pid)
     f.close()
 
+writePidFile()
+
+from app import app
 
 parser = argparse.ArgumentParser(description='Offline Subtitle Generation for videos')
 parser.add_argument('-d', '--debug', default=False, action='store_true', help='Run in debug mode.')
@@ -35,6 +37,5 @@ else:
 
 logger = logging.getLogger("MainLogger")
 logger.debug("Started")
-writePidFile()
 
 app.main()
