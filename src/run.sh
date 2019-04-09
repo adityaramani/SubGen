@@ -13,12 +13,12 @@ cd /home/aditya/Documents/project/SubGen/src  && /home/aditya/.venvs/tf/bin/pyth
 sleep 2
 spid=`cat /home/aditya/Documents/project/SubGen/tmp/recognizer.pid`
 
-/home/aditya/.venvs/tf/bin/psrecord $spid --log /home/aditya/Documents/project/SubGen/tmp/recognizer.txt --interval 0.2 --plot /home/aditya/Documents/project/SubGen/tmp/recog.png --include-children &
+/home/aditya/.venvs/tf/bin/psrecord $spid --log /home/aditya/Documents/project/SubGen/tmp/recognizer.txt --interval 0.2 --plot "/home/aditya/Documents/project/SubGen/tmp/recog_$1.png" --include-children &
 
 cd /home/aditya/Documents/project/SubGen/src  && /home/aditya/.venvs/vlc/bin/python run.py -d &
 sleep 2
 ppid=`cat /home/aditya/Documents/project/SubGen/tmp/player.pid`
-/home/aditya/.venvs/tf/bin/psrecord $ppid --log /home/aditya/Documents/project/SubGen/tmp/player.txt --interval 0.2 --plot /home/aditya/Documents/project/SubGen/tmp/player.png --include-children &
+/home/aditya/.venvs/tf/bin/psrecord $ppid --log /home/aditya/Documents/project/SubGen/tmp/player.txt --interval 0.2 --plot "/home/aditya/Documents/project/SubGen/tmp/player_$1.png" --include-children &
 
 
 echo "Press Ctrl + C to exit"
