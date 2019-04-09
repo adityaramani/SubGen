@@ -109,10 +109,10 @@ class AudioGenerator():
         """ Shuffle the training or validation data
         """
         if partition == 'train':
-            self.train_audio_paths, self.train_durations, self.train_texts = shuffle_data(
+            self.train_audio_paths, self.train_durations, self.train_texts = self.shuffle_data(
                 self.train_audio_paths, self.train_durations, self.train_texts)
         elif partition == 'valid':
-            self.valid_audio_paths, self.valid_durations, self.valid_texts = shuffle_data(
+            self.valid_audio_paths, self.valid_durations, self.valid_texts = self.shuffle_data(
                 self.valid_audio_paths, self.valid_durations, self.valid_texts)
         else:
             raise Exception("Invalid partition. "
@@ -249,19 +249,19 @@ class AudioGenerator():
         """
         return (feature - self.feats_mean) / (self.feats_std + eps)
 
-def shuffle_data(audio_paths, durations, texts):
-    """ Shuffle the data (called after making a complete pass through 
-        training or validation data during the training process)
-    Params:
-        audio_paths (list): Paths to audio clips
-        durations (list): Durations of utterances for each audio clip
-        texts (list): Sentences uttered in each audio clip
-    """
-    p = np.random.permutation(len(audio_paths))
-    audio_paths = [audio_paths[i] for i in p] 
-    durations = [durations[i] for i in p] 
-    texts = [texts[i] for i in p]
-    return audio_paths, durations, texts
+    def shuffle_data(audio_paths, durations, texts):
+        """ Shuffle the data (called after making a complete pass through 
+            training or validation data during the training process)
+        Params:
+            audio_paths (list): Paths to audio clips
+            durations (list): Durations of utterances for each audio clip
+            texts (list): Sentences uttered in each audio clip
+        """
+        p = np.random.permutation(len(audio_paths))
+        audio_paths = [audio_paths[i] for i in p] 
+        durations = [durations[i] for i in p] 
+        texts = [texts[i] for i in p]
+        return audio_paths, durations, texts
 
 def sort_data(audio_paths, durations, texts):
     """ Sort the data by duration 
