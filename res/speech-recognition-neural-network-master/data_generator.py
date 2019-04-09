@@ -1,7 +1,4 @@
-"""
-Defines a class that is used to featurize audio clips, and provide
-them to the network for training or testing.
-"""
+
 
 import json
 import numpy as np
@@ -21,16 +18,7 @@ class AudioGenerator():
     def __init__(self, step=10, window=20, max_freq=8000, mfcc_dim=13,
         minibatch_size=20, desc_file=None, spectrogram=True, max_duration=10.0, 
         sort_by_duration=False):
-        """
-        Params:
-            step (int): Step size in milliseconds between windows (for spectrogram ONLY)
-            window (int): FFT window size in milliseconds (for spectrogram ONLY)
-            max_freq (int): Only FFT bins corresponding to frequencies between
-                [0, max_freq] are returned (for spectrogram ONLY)
-            desc_file (str, optional): Path to a JSON-line file that contains
-                labels and paths to the audio files. If this is None, then
-                load metadata right away
-        """
+        
 
         self.feat_dim = calc_feat_dim(window, max_freq)
         self.mfcc_dim = mfcc_dim
@@ -51,8 +39,7 @@ class AudioGenerator():
         self.sort_by_duration = sort_by_duration
 
     def get_batch(self, partition):
-        """ Obtain a batch of train, validation, or test data
-        """
+        
         if partition == 'train':
             audio_paths = self.train_audio_paths
             cur_index = self.cur_train_index
@@ -119,21 +106,19 @@ class AudioGenerator():
                 "Must be train/validation")
 
     def sort_data_by_duration(self, partition):
-        """ Sort the training or validation sets by (increasing) duration
-        """
+        
         if partition == 'train':
-            self.train_audio_paths, self.train_durations, self.train_texts = sort_data(
+            self.train_audio_paths, self.train_durations, self.train_texts = self.sort_data(
                 self.train_audio_paths, self.train_durations, self.train_texts)
         elif partition == 'valid':
-            self.valid_audio_paths, self.valid_durations, self.valid_texts = sort_data(
+            self.valid_audio_paths, self.valid_durations, self.valid_texts = self.sort_data(
                 self.valid_audio_paths, self.valid_durations, self.valid_texts)
         else:
             raise Exception("Invalid partition. "
                 "Must be train/validation")
 
     def next_train(self):
-        """ Obtain a batch of training data
-        """
+       
         while True:
             ret = self.get_batch('train')
             self.cur_train_index += self.minibatch_size
@@ -143,8 +128,7 @@ class AudioGenerator():
             yield ret    
 
     def next_valid(self):
-        """ Obtain a batch of validation data
-        """
+        
         while True:
             ret = self.get_batch('valid')
             self.cur_valid_index += self.minibatch_size
@@ -154,8 +138,7 @@ class AudioGenerator():
             yield ret
 
     def next_test(self):
-        """ Obtain a batch of test data
-        """
+        
         while True:
             ret = self.get_batch('test')
             self.cur_test_index += self.minibatch_size
@@ -178,13 +161,7 @@ class AudioGenerator():
         self.load_metadata_from_desc_file(desc_file, 'test')
     
     def load_metadata_from_desc_file(self, desc_file, partition):
-        """ Read metadata from a JSON-line file
-            (possibly takes long, depending on the filesize)
-        Params:
-            desc_file (str):  Path to a JSON-line file that contains labels and
-                paths to the audio files
-            partition (str): One of 'train', 'validation' or 'test'
-        """
+       
         audio_paths, durations, texts = [], [], []
         with open(desc_file) as json_line_file:
             for line_num, json_line in enumerate(json_line_file):
@@ -218,10 +195,7 @@ class AudioGenerator():
              "Must be train/validation/test")
             
     def fit_train(self, k_samples=100):
-        """ Estimate the mean and std of the features from the training set
-        Params:
-            k_samples (int): Use this number of samples for estimation
-        """
+        
         k_samples = min(k_samples, len(self.train_audio_paths))
         samples = self.rng.sample(self.train_audio_paths, k_samples)
         feats = [self.featurize(s) for s in samples]
@@ -230,10 +204,7 @@ class AudioGenerator():
         self.feats_std = np.std(feats, axis=0)
         
     def featurize(self, audio_clip):
-        """ For a given audio clip, calculate the corresponding feature
-        Params:
-            audio_clip (str): Path to the audio clip
-        """
+       
         if self.spectrogram:
             return spectrogram_from_file(
                 audio_clip, step=self.step, window=self.window,
@@ -249,36 +220,24 @@ class AudioGenerator():
         """
         return (feature - self.feats_mean) / (self.feats_std + eps)
 
-    def shuffle_data(audio_paths, durations, texts):
-        """ Shuffle the data (called after making a complete pass through 
-            training or validation data during the training process)
-        Params:
-            audio_paths (list): Paths to audio clips
-            durations (list): Durations of utterances for each audio clip
-            texts (list): Sentences uttered in each audio clip
-        """
-        p = np.random.permutation(len(audio_paths))
-        audio_paths = [audio_paths[i] for i in p] 
-        durations = [durations[i] for i in p] 
-        texts = [texts[i] for i in p]
-        return audio_paths, durations, texts
+	def shuffle_data(self,audio_paths, durations, texts):
+		
+		p = np.random.permutation(len(audio_paths))
+		audio_paths = [audio_paths[i] for i in p] 
+		durations = [durations[i] for i in p] 
+		texts = [texts[i] for i in p]
+		return audio_paths, durations, texts
 
-def sort_data(audio_paths, durations, texts):
-    """ Sort the data by duration 
-    Params:
-        audio_paths (list): Paths to audio clips
-        durations (list): Durations of utterances for each audio clip
-        texts (list): Sentences uttered in each audio clip
-    """
-    p = np.argsort(durations).tolist()
-    audio_paths = [audio_paths[i] for i in p]
-    durations = [durations[i] for i in p] 
-    texts = [texts[i] for i in p]
-    return audio_paths, durations, texts
+	def sort_data(self,audio_paths, durations, texts):
+	   
+		p = np.argsort(durations).tolist()
+		audio_paths = [audio_paths[i] for i in p]
+		durations = [durations[i] for i in p] 
+		texts = [texts[i] for i in p]
+		return audio_paths, durations, texts
 
 def vis_train_features(index=0):
-    """ Visualizing the data point in the training set at the supplied index
-    """
+    
     # obtain spectrogram
     audio_gen = AudioGenerator(spectrogram=True)
     audio_gen.load_train_data()
