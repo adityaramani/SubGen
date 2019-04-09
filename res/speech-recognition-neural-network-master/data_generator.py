@@ -229,7 +229,6 @@ class AudioGenerator():
         self.feats_mean = np.mean(feats, axis=0)
         self.feats_std = np.std(feats, axis=0)
         
-        
     def featurize(self, audio_clip):
         """ For a given audio clip, calculate the corresponding feature
         Params:
@@ -241,101 +240,99 @@ class AudioGenerator():
                 max_freq=self.max_freq)
         else:
             (rate, sig) = wav.read(audio_clip)
-            return mfcc(sig, rate, numcep=self.mfcc_dim, nfft=2048)
+            return mfcc(sig, rate, numcep=self.mfcc_dim)
 
     def normalize(self, feature, eps=1e-14):
         """ Center a feature using the mean and std
         Params:
             feature (numpy.ndarray): Feature to normalize
         """
-        #changed
-        #return (feature - self.feats_mean) / (self.feats_std + eps)
-        return (feature) / (eps)
+        return (feature - self.feats_mean) / (self.feats_std + eps)
 
-    def shuffle_data(audio_paths, durations, texts):
-        """ Shuffle the data (called after making a complete pass through 
-            training or validation data during the training process)
-        Params:
-            audio_paths (list): Paths to audio clips
-            durations (list): Durations of utterances for each audio clip
-            texts (list): Sentences uttered in each audio clip
-        """
-        p = np.random.permutation(len(audio_paths))
-        audio_paths = [audio_paths[i] for i in p] 
-        durations = [durations[i] for i in p] 
-        texts = [texts[i] for i in p]
-        return audio_paths, durations, texts
+def shuffle_data(audio_paths, durations, texts):
+    """ Shuffle the data (called after making a complete pass through 
+        training or validation data during the training process)
+    Params:
+        audio_paths (list): Paths to audio clips
+        durations (list): Durations of utterances for each audio clip
+        texts (list): Sentences uttered in each audio clip
+    """
+    p = np.random.permutation(len(audio_paths))
+    audio_paths = [audio_paths[i] for i in p] 
+    durations = [durations[i] for i in p] 
+    texts = [texts[i] for i in p]
+    return audio_paths, durations, texts
 
-    def sort_data(audio_paths, durations, texts):
-        """ Sort the data by duration 
-        Params:
-            audio_paths (list): Paths to audio clips
-            durations (list): Durations of utterances for each audio clip
-            texts (list): Sentences uttered in each audio clip
-        """
-        p = np.argsort(durations).tolist()
-        audio_paths = [audio_paths[i] for i in p]
-        durations = [durations[i] for i in p] 
-        texts = [texts[i] for i in p]
-        return audio_paths, durations, texts
+def sort_data(audio_paths, durations, texts):
+    """ Sort the data by duration 
+    Params:
+        audio_paths (list): Paths to audio clips
+        durations (list): Durations of utterances for each audio clip
+        texts (list): Sentences uttered in each audio clip
+    """
+    p = np.argsort(durations).tolist()
+    audio_paths = [audio_paths[i] for i in p]
+    durations = [durations[i] for i in p] 
+    texts = [texts[i] for i in p]
+    return audio_paths, durations, texts
 
-    def vis_train_features(index=0):
-        """ Visualizing the data point in the training set at the supplied index
-        """
-        # obtain spectrogram
-        audio_gen = AudioGenerator(spectrogram=True)
-        audio_gen.load_train_data()
-        vis_audio_path = audio_gen.train_audio_paths[index]
-        vis_spectrogram_feature = audio_gen.normalize(audio_gen.featurize(vis_audio_path))
-        # obtain mfcc
-        audio_gen = AudioGenerator(spectrogram=False)
-        audio_gen.load_train_data()
-        vis_mfcc_feature = audio_gen.normalize(audio_gen.featurize(vis_audio_path))
-        # obtain text label
-        vis_text = audio_gen.train_texts[index]
-        # obtain raw audio
-        vis_raw_audio, _ = librosa.load(vis_audio_path)
-        # print total number of training examples
-        print('There are %d total training examples.' % len(audio_gen.train_audio_paths))
-        # return labels for plotting
-        return vis_text, vis_raw_audio, vis_mfcc_feature, vis_spectrogram_feature, vis_audio_path
+def vis_train_features(index=0):
+    """ Visualizing the data point in the training set at the supplied index
+    """
+    # obtain spectrogram
+    audio_gen = AudioGenerator(spectrogram=True)
+    audio_gen.load_train_data()
+    vis_audio_path = audio_gen.train_audio_paths[index]
+    vis_spectrogram_feature = audio_gen.normalize(audio_gen.featurize(vis_audio_path))
+    # obtain mfcc
+    audio_gen = AudioGenerator(spectrogram=False)
+    audio_gen.load_train_data()
+    vis_mfcc_feature = audio_gen.normalize(audio_gen.featurize(vis_audio_path))
+    # obtain text label
+    vis_text = audio_gen.train_texts[index]
+    # obtain raw audio
+    vis_raw_audio, _ = librosa.load(vis_audio_path)
+    # print total number of training examples
+    print('There are %d total training examples.' % len(audio_gen.train_audio_paths))
+    # return labels for plotting
+    return vis_text, vis_raw_audio, vis_mfcc_feature, vis_spectrogram_feature, vis_audio_path
 
 
-    def plot_raw_audio(vis_raw_audio):
-        # plot the raw audio signal
-        fig = plt.figure(figsize=(12,3))
-        ax = fig.add_subplot(111)
-        steps = len(vis_raw_audio)
-        ax.plot(np.linspace(1, steps, steps), vis_raw_audio)
-        plt.title('Audio Signal')
-        plt.xlabel('Time')
-        plt.ylabel('Amplitude')
-        plt.show()
+def plot_raw_audio(vis_raw_audio):
+    # plot the raw audio signal
+    fig = plt.figure(figsize=(12,3))
+    ax = fig.add_subplot(111)
+    steps = len(vis_raw_audio)
+    ax.plot(np.linspace(1, steps, steps), vis_raw_audio)
+    plt.title('Audio Signal')
+    plt.xlabel('Time')
+    plt.ylabel('Amplitude')
+    plt.show()
 
-    def plot_mfcc_feature(vis_mfcc_feature):
-        # plot the MFCC feature
-        fig = plt.figure(figsize=(12,5))
-        ax = fig.add_subplot(111)
-        im = ax.imshow(vis_mfcc_feature, cmap=plt.cm.jet, aspect='auto')
-        plt.title('Normalized MFCC')
-        plt.ylabel('Time')
-        plt.xlabel('MFCC Coefficient')
-        divider = make_axes_locatable(ax)
-        cax = divider.append_axes("right", size="5%", pad=0.05)
-        plt.colorbar(im, cax=cax)
-        ax.set_xticks(np.arange(0, 13, 2), minor=False);
-        plt.show()
+def plot_mfcc_feature(vis_mfcc_feature):
+    # plot the MFCC feature
+    fig = plt.figure(figsize=(12,5))
+    ax = fig.add_subplot(111)
+    im = ax.imshow(vis_mfcc_feature, cmap=plt.cm.jet, aspect='auto')
+    plt.title('Normalized MFCC')
+    plt.ylabel('Time')
+    plt.xlabel('MFCC Coefficient')
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    plt.colorbar(im, cax=cax)
+    ax.set_xticks(np.arange(0, 13, 2), minor=False);
+    plt.show()
 
-    def plot_spectrogram_feature(vis_spectrogram_feature):
-        # plot the normalized spectrogram
-        fig = plt.figure(figsize=(12,5))
-        ax = fig.add_subplot(111)
-        im = ax.imshow(vis_spectrogram_feature, cmap=plt.cm.jet, aspect='auto')
-        plt.title('Normalized Spectrogram')
-        plt.ylabel('Time')
-        plt.xlabel('Frequency')
-        divider = make_axes_locatable(ax)
-        cax = divider.append_axes("right", size="5%", pad=0.05)
-        plt.colorbar(im, cax=cax)
-        plt.show()
+def plot_spectrogram_feature(vis_spectrogram_feature):
+    # plot the normalized spectrogram
+    fig = plt.figure(figsize=(12,5))
+    ax = fig.add_subplot(111)
+    im = ax.imshow(vis_spectrogram_feature, cmap=plt.cm.jet, aspect='auto')
+    plt.title('Normalized Spectrogram')
+    plt.ylabel('Time')
+    plt.xlabel('Frequency')
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    plt.colorbar(im, cax=cax)
+    plt.show()
 
