@@ -141,7 +141,6 @@ class SphinxEngine(SpeechRecognizerBase):
 
         inf = ' '.join( filter(lambda x : not x.startswith("INFO") and not x.startswith("-"), inf))
 
-        print(inf)
 
         inference_end = timer() - inference_start
         
@@ -215,7 +214,6 @@ class RNNEngine(SpeechRecognizerBase):
 
         inf = ''.join(int_sequence_to_text(pred_ints))
 
-        print(inf)
 
         inference_end = timer() - inference_start
         

@@ -19,7 +19,7 @@ ds.alphabet_path : "/home/aditya/Documents/project/indian_model/prebuilt/deepspe
 ds.lm_path : "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/lm.binary"
 ds.trie_path : "/home/aditya/Documents/project/indian_model/prebuilt/deepspeech-0.4.1-models/models/trie"
 
-sphinx.hmmpath : "/home/aditya/Downloads/new_model/indic.falign_ci_ptm"
+sphinx.hmmpath : "/home/aditya/Downloads/indic_cd_cont_15000/indic.cd_ptm_15000"
 
 # sphinx.hmmpath2 : "/home/ramaniaditya22/indic.falign_ci_ptm"
 
@@ -31,3 +31,6 @@ sphinx.dictpath : "/home/aditya/Downloads/new_model/indic.dic"
 # sphinx.dictpath2 : "/home/ramaniaditya22/data/indic.dic"
 
 rnn.model_path : "/home/aditya/Documents/project/SubGen/res/speech-recognition-neural-network-master/model_end_new.hdf5"
+
+
+
