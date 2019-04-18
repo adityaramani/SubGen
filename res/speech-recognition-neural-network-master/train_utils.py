@@ -71,12 +71,13 @@ def train_model(input_to_softmax,
         
     #if os.path.exists('/gdrive/My Drive/results/model_end.h5'):
     #    model.load_weights('/gdrive/My Drive/results/model_end.h5')
-    resume_weights = '/gdrive/My Drive/results/output_dim.hdf5'
+    /*
+    resume_weights = '/gdrive/My Drive/results/output_dim.h5'
     
     if os.path.isfile(resume_weights):
         print ("Resumed model's weights from {}".format(resume_weights))
         model.load_weights(resume_weights)
-    
+    */
     # add checkpointer
     checkpointer = ModelCheckpoint(filepath='/gdrive/My Drive/results/'+save_model_path, monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
 
