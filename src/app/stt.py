@@ -13,7 +13,7 @@ import os
 import time 
 import signal
 
-SPLIT_INTERVAL = 7
+SPLIT_INTERVAL = 7 #seconds
 BUFFER = 3
 
 logger = logging.getLogger("SpeechToText")

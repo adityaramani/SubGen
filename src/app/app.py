@@ -73,12 +73,7 @@ class Player(QtWidgets.QMainWindow):
         self.hbuttonbox.addWidget(self.volumeslider)
         self.volumeslider.valueChanged.connect(self.set_volume)
         
-        self.subsBox = QtWidgets.QLabel()
-        self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.subsBox.setStyleSheet("background-color: black; color:white;font-size:20px ; ")
-        self.subsBox.hide()
-
-        
+       
         
         # self.subPalette = self.subsBox.palette()
         # self.subPalette.setColor(QtGui.QPalette.Text, QtGui.QColor(120, 120, 0,0))
@@ -91,7 +86,11 @@ class Player(QtWidgets.QMainWindow):
         # self.subsBox.paintEvent = self.transparentPaint
         # self.subsBox.setAttribute(Qt.WA_TransparentForMouseEvents)
         # self.subsBox.setGeometry(1,10 ,250,30)
-       
+        
+        self.subsBox = QtWidgets.QLabel()
+        self.subsBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.subsBox.setStyleSheet("background-color: black; color:white;font-size:20px ; ")
+        self.subsBox.hide()
         self.subsBox.setText("")
 
         
