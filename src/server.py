@@ -134,7 +134,6 @@ class Handler(FileSystemEventHandler):
 
         elif event.event_type == 'modified' and event.src_path not in seen:
             seen.add(event.src_path)
-            print(event)
             logger.debug("Received modified event - {}. at  {}".format( event.src_path, timer()))
             q.put(event.src_path)    
             

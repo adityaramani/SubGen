@@ -61,7 +61,6 @@ class DeepSpeechEngine(SpeechRecognizerBase):
         lm_load_end = timer() - lm_load_start
         logger.info('[1.b] Loaded language model in {:.3}s.'.format(lm_load_end))
 
-
     def infer(self, file_path):
         fin = wave.open(file_path, 'rb')
         fs = fin.getframerate()
@@ -87,7 +86,6 @@ class DeepSpeechEngine(SpeechRecognizerBase):
         
         return (file_path, inf)
         
-
     def convert_samplerate(self, audio_path):
         sox_cmd = 'sox {} --type raw --bits 16 --channels 1 --rate 16000 --encoding signed-integer --endian little --compression 0.0 --no-dither - '.format(quote(audio_path))
         try:
@@ -98,8 +96,6 @@ class DeepSpeechEngine(SpeechRecognizerBase):
             raise OSError(e.errno, 'SoX not found, use 16kHz files or install it: {}'.format(e.strerror))
 
         return 16000, np.frombuffer(output, np.int16)
-
-
 
 
 
@@ -189,11 +185,7 @@ class RNNEngine(SpeechRecognizerBase):
         
         model_load_end = timer() - model_load_start
         logger.info('Loaded model in {:.3}s.'.format(model_load_end))
-
-
-
 		
-
     def infer (self, audio_path):
         inference_start = timer()
         fin = wave.open(audio_path, 'rb')
