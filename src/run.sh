@@ -1,14 +1,18 @@
+#!/bin/bash
 
 pkill -f python*
+
+
 
 if [ "$1"  == "" ]
 then
     echo  "Enter valid backend type {RNN, DS, SPHINX}"
-    echo  "Exiting ...."
-    exit -1
+   # echo  "Exiting ...."
+   # exit -1
 fi
 
-cd /home/aditya/Documents/project/SubGen/src  && /home/aditya/.venvs/tf/bin/python server.py -b $1& 
+
+cd /home/aditya/Documents/project/SubGen/src  && /home/aditya/.venvs/tf/bin/python server.py -b DS& 
 
 sleep 2
 spid=`cat /home/aditya/Documents/project/SubGen/tmp/recognizer.pid`

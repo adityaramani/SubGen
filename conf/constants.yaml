@@ -30,7 +30,7 @@ sphinx.dictpath : "/home/aditya/Downloads/new_model/indic.dic"
 
 # sphinx.dictpath2 : "/home/ramaniaditya22/data/indic.dic"
 
-rnn.model_path : "/home/aditya/Documents/project/SubGen/res/speech-recognition-neural-network-master/model_end_new.hdf5"
+rnn.model_path : "/home/aditya/Downloads/output_dim.h5"
 
 
 

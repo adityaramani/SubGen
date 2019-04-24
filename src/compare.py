@@ -1,7 +1,13 @@
 import io
 import os
 
-import csv 
+import csv
+
+from speech_recognition.speech_recognition import *
+
+rnn = RNNEngine()
+ 
+'''
 
 # Imports the Google Cloud client library
 from google.cloud import speech
@@ -36,3 +42,4 @@ response = client.recognize(config, audio)
 
 for result in response.results:
     print('Transcript: {}'.format(result.alternatives[0].transcript))
+'''

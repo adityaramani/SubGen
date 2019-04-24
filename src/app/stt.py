@@ -80,7 +80,7 @@ class SyncDaemon(object):
         self.subs_box = sub_box
         self.extracted_chunks = set({})
         self.subs_text  = {}
-        
+        subprocess.run(["rm" ,"/tmp/stt/*"])
         signal.signal(signal.SIGXFSZ, self.receive_text)
         address = ('localhost', 6001)     # family is deduced to be 'AF_INET'
         self.conn   = Client(address)

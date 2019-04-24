@@ -155,9 +155,9 @@ class Player(QtWidgets.QMainWindow):
         self.mediaplayer.stop()
         self.playbutton.setText("Play")
 
-    def check_file(filename):
-
-        if filename.endswith(".avi") or filename.endswith(".mp4")
+    def check_file(self,filename):
+        print(filename)
+        if filename.endswith(".avi") or filename.endswith(".mp4"):
             return
 
         self.subsBox.setText("Exiting Player Invalid File Type Chosen")
@@ -172,9 +172,9 @@ class Player(QtWidgets.QMainWindow):
         filename = QtWidgets.QFileDialog.getOpenFileName(self, dialog_txt, os.path.expanduser('~'))
         if not filename:
             return
-
+        self.subsBox.setText("") 
         self.check_file(filename[0])
-
+	
         if hasattr(self, 'SyncDaemon'):
             self.SyncDaemon.interrupt()
             del(self.SyncDaemon)
