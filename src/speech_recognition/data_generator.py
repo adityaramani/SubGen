@@ -83,7 +83,8 @@ class AudioGenerator():
         # initialize the arrays
         X_data = np.zeros([self.minibatch_size, max_length, 
             self.feat_dim*self.spectrogram + self.mfcc_dim*(not self.spectrogram)])
-        labels = np.ones([self.minibatch_size, max_string_length]) * 28
+        #changed
+        labels = np.ones([self.minibatch_size, max_string_length]) * 29
         input_length = np.zeros([self.minibatch_size, 1])
         label_length = np.zeros([self.minibatch_size, 1])
         
