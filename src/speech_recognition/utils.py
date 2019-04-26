@@ -11,16 +11,7 @@ def calc_feat_dim(window, max_freq):
 
 def conv_output_length(input_length, filter_size, border_mode, stride,
                        dilation=1):
-    """ Compute the length of the output sequence after 1D convolution along
-        time. Note that this function is in line with the function used in
-        Convolution1D class from Keras.
-    Params:
-        input_length (int): Length of the input sequence.
-        filter_size (int): Width of the convolution kernel.
-        border_mode (str): Only support `same` or `valid`.
-        stride (int): Stride size used in 1D convolution.
-        dilation (int)
-    """
+    
     if input_length is None:
         return None
     assert border_mode in {'same', 'valid'}
@@ -33,35 +24,13 @@ def conv_output_length(input_length, filter_size, border_mode, stride,
 
 
 def spectrogram(samples, fft_length=256, sample_rate=2, hop_length=128):
-    """
-    Compute the spectrogram for a real signal.
-    The parameters follow the naming convention of
-    matplotlib.mlab.specgram
-
-    Args:
-        samples (1D array): input audio signal
-        fft_length (int): number of elements in fft window
-        sample_rate (scalar): sample rate
-        hop_length (int): hop length (relative offset between neighboring
-            fft windows).
-
-    Returns:
-        x (2D array): spectrogram [frequency x time]
-        freq (1D array): frequency of each row in x
-
-    Note:
-        This is a truncating computation e.g. if fft_length=10,
-        hop_length=5 and the signal has 23 elements, then the
-        last 3 elements will be truncated.
-    """
+    
     assert not np.iscomplexobj(samples), "Must not pass in complex numbers"
 
     window = np.hanning(fft_length)[:, None]
     window_norm = np.sum(window**2)
 
-    # The scaling below follows the convention of
-    # matplotlib.mlab.specgram which is the same as
-    # matlabs specgram.
+   
     scale = window_norm * sample_rate
 
     trunc = (len(samples) - fft_length) % hop_length
@@ -90,15 +59,7 @@ def spectrogram(samples, fft_length=256, sample_rate=2, hop_length=128):
 
 def spectrogram_from_file(filename, step=10, window=20, max_freq=None,
                           eps=1e-14):
-    """ Calculate the log of linear spectrogram from FFT energy
-    Params:
-        filename (str): Path to the audio file
-        step (int): Step size in milliseconds between windows
-        window (int): FFT window size in milliseconds
-        max_freq (int): Only FFT bins corresponding to frequencies between
-            [0, max_freq] are returned
-        eps (float): Small value to ensure numerical stability (for ln(x))
-    """
+   
     with soundfile.SoundFile(filename) as sound_file:
         audio = sound_file.read(dtype='float32')
         sample_rate = sound_file.samplerate
