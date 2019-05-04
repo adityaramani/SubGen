@@ -228,8 +228,8 @@ class AudioGenerator():
     def normalize(self, feature, eps=1e-14):
        
         #changed
-        #return (feature - self.feats_mean) / (self.feats_std + eps)
-        return (feature) / (eps)
+        return (feature - self.feats_mean) / (self.feats_std + eps)
+        #return (feature) / (eps)
 
     def shuffle_data(audio_paths, durations, texts):
        
