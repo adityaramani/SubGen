@@ -140,7 +140,7 @@ def bidirectional_rnn_model(input_dim, units, output_dim=30):
     return model
 
 def final_model(input_dim, filters, kernel_size, conv_stride,
-    conv_border_mode, units, output_dim=30, dropout_rate=0.5, number_of_layers=2, 
+    conv_border_mode, units, output_dim=30, dropout_rate=0.5, number_of_layers=4, 
     cell=GRU, activation='tanh'):
     """ Build a deep network for speech 
     """
