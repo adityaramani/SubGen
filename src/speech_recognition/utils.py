@@ -22,7 +22,7 @@ def conv_output_length(input_length, filter_size, border_mode, stride,
         output_length = input_length - dilated_filter_size + 1
     return (output_length + stride - 1) // stride
 
-
+'''
 def spectrogram(samples, fft_length=256, sample_rate=2, hop_length=128):
     
     assert not np.iscomplexobj(samples), "Must not pass in complex numbers"
@@ -79,6 +79,7 @@ def spectrogram_from_file(filename, step=10, window=20, max_freq=None,
             hop_length=hop_length)
         ind = np.where(freqs <= max_freq)[0][-1] + 1
     return np.transpose(np.log(pxx[:ind, :] + eps))
+'''
 
 def text_to_int_sequence(text):
     """ Convert text to an integer sequence """
